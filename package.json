@@ -1,8 +1,8 @@
 {
   "name": "nest-boilerplate",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "",
-  "author": "",
+  "author": "Techhive.IO LLC",
   "private": true,
   "license": "CHECK LICENSE UNDER LICENSE.md",
   "scripts": {

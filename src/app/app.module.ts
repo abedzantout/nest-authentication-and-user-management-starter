@@ -17,7 +17,7 @@ import { FeaturesModule } from '../features/features.module';
       url: process.env.MONGODB_CONNECTION_STRING,
       database: process.env.MONGODB_DATABASE,
       entities: [
-        __dirname + '/**/*.entity{.ts,.js}',
+        __dirname + '/../**/**.entity{.ts,.js}',
       ],
       ssl: true,
       useUnifiedTopology: true,

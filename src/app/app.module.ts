@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { FeaturesModule } from '../features/features.module';
+import { SharedModule } from '../shared/shared.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { FeaturesModule } from '../features/features.module';
       useUnifiedTopology: true,
       useNewUrlParser: true,
     }),
+    SharedModule,
     FeaturesModule,
   ],
   controllers: [AppController],

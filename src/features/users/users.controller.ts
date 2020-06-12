@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { UsersService } from './services/users.service';
+import { UsersService } from '../../shared/users/services/users.service';
 import { UserPayload } from './models/user.payload';
 import { UserUpdatePayload } from './models/user-update.payload';
 

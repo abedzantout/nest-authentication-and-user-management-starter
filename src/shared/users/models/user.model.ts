@@ -1,7 +1,5 @@
-import { ObjectID } from 'typeorm';
-
 export interface UserInterface {
-  readonly id?: ObjectID;
+  readonly id?: string;
   readonly first_name: string;
   readonly last_name: string;
   readonly password: string;

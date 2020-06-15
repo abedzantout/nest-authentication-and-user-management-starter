@@ -1,40 +1,44 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from '../schemas/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
-import { UserInterface } from '../models/user.model';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import * as bcrypt from 'bcrypt';
+
+import { User } from '../schemas/user.schema';
+
+import { UserInterface } from '../models/user.model';
+
 
 @Injectable()
 export class UsersService {
 
-  constructor(@InjectRepository(User)
-              private readonly usersRepository: MongoRepository<User>) {
+  constructor(@InjectModel(User.name)
+              private readonly userModel: Model<User>) {
   }
 
-  async getAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+  public async getAll(): Promise<User[]> {
+    return await this.userModel.find().exec();
   }
 
-  async getById(id: string): Promise<User> {
-    return await this.usersRepository.findOne(id);
+  public async getById(id: string): Promise<User> {
+    return await this.userModel.findById(id).exec();
   }
 
-  async addOne(user: UserInterface): Promise<User> {
+  public async addOne(user: UserInterface): Promise<User> {
 
-    return await this.usersRepository.save(user);
+    return await this.userModel.create(user);
   }
 
-  async updateOne(user: UserInterface): Promise<any> {
-    return await this.usersRepository.findOneAndUpdate({ id: user.id }, user);
+  public async updateOne(user: UserInterface): Promise<any> {
+    return await this.userModel.findOneAndUpdate({ id: user.id }, user).exec();
   }
 
-  async deleteOne(id: string): Promise<any> {
-    return await this.usersRepository.findOneAndDelete({ id });
+  public async deleteOne(id: string): Promise<any> {
+    return await this.userModel.findOneAndDelete({ id }).exec();
   }
 
-  async findUserAndPasswordById(email: string, password: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ email });
+  public async findUserAndPasswordById(email: string, password: string): Promise<User> {
+    const user = await this.userModel.findOne({ email });
     const checkPassword = await bcrypt.compare(password, user.password);
 
     if (checkPassword) {

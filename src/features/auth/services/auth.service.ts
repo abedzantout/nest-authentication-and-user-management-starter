@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginCredentials, RegisterCredentials } from '../models/login.model';
 import { UserInterface } from '../../../shared/users/models/user.model';
 
-import { User } from '../../../shared/users/schemas/user.entity';
+import { User } from '../../../shared/users/schemas/user.schema';
 import { UsersService } from '../../../shared/users/services/users.service';
 
 @Injectable()
@@ -13,7 +13,8 @@ export class AuthService {
   }
 
   async register(userInformation: RegisterCredentials): Promise<User> {
-    const user: UserInterface = { ...userInformation, password: bcrypt.hash(userInformation.password, 10) };
+    const hashedPassword = await bcrypt.hash(userInformation.password, 10);
+    const user: UserInterface = { ...userInformation, password: hashedPassword };
 
     return await this.usersService.addOne(user);
   }

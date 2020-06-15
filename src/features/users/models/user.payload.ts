@@ -7,7 +7,11 @@ export class UserPayload {
 
   @IsNotEmpty()
   @IsString()
-  name: string;
+  first_name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  last_name: string;
 
   @IsNotEmpty()
   @IsString()

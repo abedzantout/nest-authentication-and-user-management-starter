@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { LoginPayload } from './models/login.payload';
-import { RegisterPayload } from './models/register.payload';
+import { LoginPayload } from './payloads/login.payload';
+import { RegisterPayload } from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
 
 @Controller('auth')

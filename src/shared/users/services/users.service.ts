@@ -25,8 +25,8 @@ export class UsersService {
   }
 
   public async addOne(user: UserInterface): Promise<User> {
-
-    return await this.userModel.create(user);
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    return await this.userModel.create({ ...user, password: hashedPassword });
   }
 
   public async updateOne(user: UserInterface): Promise<any> {

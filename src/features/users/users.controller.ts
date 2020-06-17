@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from '../../shared/users/services/users.service';
 import { UserPayload } from './models/user.payload';
 import { UserUpdatePayload } from './models/user-update.payload';
+import { User } from '../../shared/users/schemas/user.schema';
+import { UserDeletePayload } from './models/user-delete.payload';
 
 @Controller('users')
 export class UsersController {
@@ -10,11 +12,12 @@ export class UsersController {
   }
 
   @Post()
-  async addUser(@Body() createUser: UserPayload) {
+  @UsePipes(new ValidationPipe())
+  async addUser(@Body() createUser: UserPayload): Promise<User> {
     try {
       return await this.usersService.addOne(createUser);
     } catch (e) {
-
+      console.log(e);
     }
   }
 
@@ -38,6 +41,7 @@ export class UsersController {
   }
 
   @Patch()
+  @UsePipes(new ValidationPipe())
   async updateUser(@Body() updatedUser: UserUpdatePayload) {
     try {
       return await this.usersService.updateOne(updatedUser);
@@ -47,9 +51,10 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: string) {
+  @UsePipes(new ValidationPipe())
+  async deleteUser(@Param() userToDelete: UserDeletePayload) {
     try {
-      return await this.usersService.deleteOne(id);
+      return await this.usersService.deleteOne(userToDelete.id);
     } catch (e) {
 
     }

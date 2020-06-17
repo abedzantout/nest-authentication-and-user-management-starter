@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 
 import { LoginCredentials, RegisterCredentials } from '../models/login.model';
-import { UserInterface } from '../../../shared/users/models/user.model';
 
 import { User } from '../../../shared/users/schemas/user.schema';
 import { UsersService } from '../../../shared/users/services/users.service';
@@ -13,15 +11,10 @@ export class AuthService {
   }
 
   async register(userInformation: RegisterCredentials): Promise<User> {
-    const hashedPassword = await bcrypt.hash(userInformation.password, 10);
-    const user: UserInterface = { ...userInformation, password: hashedPassword };
-
-    return await this.usersService.addOne(user);
+    return await this.usersService.addOne(userInformation);
   }
 
   async login(credentials: LoginCredentials) {
-
     return await this.usersService.findUserAndPasswordById(credentials.email, credentials.password);
-
   }
 }

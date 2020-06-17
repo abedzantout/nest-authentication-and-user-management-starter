@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginPayload } from './models/login.payload';
 import { RegisterPayload } from './models/register.payload';
 import { AuthService } from './services/auth.service';
@@ -10,6 +10,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
   async login(@Body() credentials: LoginPayload) {
     try {
@@ -20,12 +21,22 @@ export class AuthController {
   }
 
   @Post('register')
+  @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
   async register(@Body() credentials: RegisterPayload) {
     try {
       return await this.authService.register(credentials);
     } catch (e) {
       // todo: handle exception
+    }
+  }
+
+  @Get('forgot-password/:email')
+  async sendEmailForgotPassword(@Param() params) {
+    try {
+
+    } catch (e) {
+
     }
   }
 }

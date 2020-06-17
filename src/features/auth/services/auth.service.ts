@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { LoginCredentials, RegisterCredentials } from '../models/login.model';
+import { LoginCredentials, RegisterCredentials } from '../models/credentials.interface';
 
 import { User } from '../../../shared/users/schemas/user.schema';
 import { UsersService } from '../../../shared/users/services/users.service';
@@ -14,7 +14,12 @@ export class AuthService {
     return await this.usersService.addOne(userInformation);
   }
 
-  async login(credentials: LoginCredentials) {
+  async login(credentials: LoginCredentials): Promise<User> {
     return await this.usersService.findUserAndPasswordById(credentials.email, credentials.password);
+  }
+
+  async sendEmailForgotPassword(email: string) {
+    const user = this.usersService.getByEmail(email);
+
   }
 }

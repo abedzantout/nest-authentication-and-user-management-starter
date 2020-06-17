@@ -54,9 +54,10 @@ export class UsersController {
   @UsePipes(new ValidationPipe())
   async deleteUser(@Param() userToDelete: UserDeletePayload) {
     try {
-      return await this.usersService.deleteOne(userToDelete.id);
+      await this.usersService.findByIdAndDelete(userToDelete.id);
+      return { success: true };
     } catch (e) {
-
+      console.log(e);
     }
   }
 }

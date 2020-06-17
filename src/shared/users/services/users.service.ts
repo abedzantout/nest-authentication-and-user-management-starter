@@ -33,8 +33,8 @@ export class UsersService {
     return await this.userModel.findOneAndUpdate({ id: user.id }, user).exec();
   }
 
-  public async deleteOne(id: string): Promise<any> {
-    return await this.userModel.findOneAndDelete({ id }).exec();
+  public async findByIdAndDelete(id: string): Promise<any> {
+    return await this.userModel.findByIdAndDelete(id).exec();
   }
 
   public async findUserAndPasswordById(email: string, password: string): Promise<User> {

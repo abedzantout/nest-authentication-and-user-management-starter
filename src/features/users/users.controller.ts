@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from '../../shared/users/services/users.service';
-import { UserPayload } from './models/user.payload';
-import { UserUpdatePayload } from './models/user-update.payload';
+import { UserPayload } from './payloads/user.payload';
+import { UserUpdatePayload } from './payloads/user-update.payload';
 import { User } from '../../shared/users/schemas/user.schema';
-import { UserDeletePayload } from './models/user-delete.payload';
+import { UserDeletePayload } from './payloads/user-delete.payload';
 
 @Controller('users')
 export class UsersController {

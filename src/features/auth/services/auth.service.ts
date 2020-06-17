@@ -10,16 +10,22 @@ export class AuthService {
   constructor(private readonly usersService: UsersService) {
   }
 
-  async register(userInformation: RegisterCredentials): Promise<User> {
+  public async register(userInformation: RegisterCredentials): Promise<User> {
     return await this.usersService.addOne(userInformation);
   }
 
-  async login(credentials: LoginCredentials): Promise<User> {
+  public async login(credentials: LoginCredentials): Promise<User> {
     return await this.usersService.findUserAndPasswordById(credentials.email, credentials.password);
   }
 
-  async sendEmailForgotPassword(email: string) {
+  public async sendEmailForgotPassword(email: string) {
     const user = this.usersService.getByEmail(email);
 
+  }
+
+  public async sendEmailVerification(email: string) {
+  }
+
+  public async resetPassword(email: string) {
   }
 }

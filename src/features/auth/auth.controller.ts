@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UsePipes, Val
 import { LoginPayload } from './payloads/login.payload';
 import { RegisterPayload } from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
+import { EmailVerificationPayload } from './payloads/email-verification.payload';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +13,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  async login(@Body() credentials: LoginPayload) {
+  public async login(@Body() credentials: LoginPayload) {
     try {
       return await this.authService.login(credentials);
     } catch (e) {
@@ -23,7 +24,7 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  async register(@Body() credentials: RegisterPayload) {
+  public async register(@Body() credentials: RegisterPayload) {
     try {
       return await this.authService.register(credentials);
     } catch (e) {
@@ -31,10 +32,29 @@ export class AuthController {
     }
   }
 
-  @Get('forgot-password/:email')
-  async sendEmailForgotPassword(@Param() params) {
+  @Get('email/resend-verification/:email')
+  public async sendEmailVerification(@Param() params: EmailVerificationPayload): Promise<any> {
     try {
+      return await this.authService.sendEmailVerification(params.email);
+    } catch (e) {
 
+    }
+  }
+
+  @Get('forgot-password/:email')
+  async sendEmailForgotPassword(@Param() params: EmailVerificationPayload) {
+    try {
+      return await this.authService.sendEmailForgotPassword(params.email);
+    } catch (e) {
+
+    }
+  }
+
+  @Post('email/reset-password')
+  @HttpCode(HttpStatus.OK)
+  public async resetPassword(@Param() params: EmailVerificationPayload) {
+    try {
+      return await this.authService.resetPassword(params.email);
     } catch (e) {
 
     }

@@ -1,4 +1,5 @@
 import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { UserRoles } from '../../../shared/users/models/user.model';
 
 export class UserUpdatePayload {
   @IsOptional()
@@ -16,4 +17,8 @@ export class UserUpdatePayload {
   @IsOptional()
   @IsString()
   password: string;
+
+  @IsOptional()
+  @IsString()
+  role: UserRoles;
 }

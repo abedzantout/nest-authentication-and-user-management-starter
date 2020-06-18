@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { UserRoles } from '../../../shared/users/models/user.model';
 
 export class RegisterPayload {
   @IsNotEmpty()
@@ -16,4 +17,8 @@ export class RegisterPayload {
   @IsNotEmpty()
   @IsString()
   last_name: string;
+
+  @IsNotEmpty()
+  @IsOptional()
+  role: UserRoles;
 }

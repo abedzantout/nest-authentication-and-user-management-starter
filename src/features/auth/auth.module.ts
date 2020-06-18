@@ -7,11 +7,13 @@ import { SharedModule } from '../../shared/shared.module';
 import { EmailVerification, EmailVerificationSchema } from './schemas/email-verification.schema';
 import { ForgottenPassword, ForgottenPasswordSchema } from './schemas/forgotten-password.schema';
 import { ConsentRegistry, ConsentRegistrySchema } from './schemas/consent-registry.schema';
+import { CoreModule } from '../../core/core.module';
 
 
 @Module({
   imports: [
     SharedModule,
+    CoreModule.forChild(),
     MongooseModule.forFeature([
       { name: EmailVerification.name, schema: EmailVerificationSchema },
       { name: ForgottenPassword.name, schema: ForgottenPasswordSchema },

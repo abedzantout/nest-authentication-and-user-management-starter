@@ -6,7 +6,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
-  Post,
+  Post, UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,8 +15,10 @@ import { RegisterPayload } from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
 import { EmailVerificationPayload } from './payloads/email-verification.payload';
 import { User } from '../../shared/users/schemas/user.schema';
+import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
 
 @Controller('auth')
+@UseInterceptors(new MongoErrorHandlerInterceptor())
 export class AuthController {
 
   constructor(private readonly authService: AuthService) {
@@ -48,6 +50,14 @@ export class AuthController {
       return await this.authService.register(credentials);
     } catch (e) {
       // todo: handle exception
+      // throw new HttpException(
+      //   {
+      //     message: e.message,
+      //     status: HttpStatus.BAD_REQUEST,
+      //   },
+      //   HttpStatus.BAD_REQUEST,
+      // );
+      throw e;
     }
   }
 

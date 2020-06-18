@@ -11,7 +11,7 @@ export class RegisterPayload {
   password: string;
 
   @IsNotEmpty()
-  @IsEmail()
+  @IsString()
   first_name: string;
 
   @IsNotEmpty()

@@ -16,12 +16,11 @@ export class MongoErrorHandlerInterceptor implements NestInterceptor {
     return next.handle()
       .pipe(catchError(error => {
         if (error instanceof MongoError && error.code === 11000) {
-          throw new HttpException(
+          throw new NotFoundException(
             {
               message: MongoErrorHandlerInterceptor.handleDuplicationUserMessage(context.getHandler().name),
-              status: HttpStatus.BAD_REQUEST,
+              status: HttpStatus.NOT_FOUND,
             },
-            HttpStatus.BAD_REQUEST,
           );
         } else {
           throw error;

@@ -24,8 +24,8 @@ export class UsersService {
     return await this.userModel.findById(id).exec();
   }
 
-  public async getByEmail(email:string):Promise<User> {
-    return await this.userModel.findOne({email}).exec()
+  public async getByEmail(email: string): Promise<User> {
+    return await this.userModel.findOne({ email }).exec();
   }
 
   public async addOne(user: UserInterface): Promise<User> {
@@ -41,21 +41,15 @@ export class UsersService {
     return await this.userModel.findByIdAndDelete(id).exec();
   }
 
-  public async findUserAndPasswordById(email: string, password: string): Promise<User> {
+  public async findUserAndPasswordById(email: string, password: string): Promise<User | Error> {
     const user = await this.userModel.findOne({ email });
-    const checkPassword = await bcrypt.compare(password, user.password);
+    const checkPassword = user ? (await bcrypt.compare(password, user.password)) : null;
 
     if (checkPassword) {
       return user;
     }
 
-    throw new HttpException(
-      {
-        message: 'Wrong email/password combination',
-        status: HttpStatus.BAD_REQUEST,
-      },
-      HttpStatus.BAD_REQUEST,
-    );
+    throw Error('Wrong email/password combination');
 
   }
 }

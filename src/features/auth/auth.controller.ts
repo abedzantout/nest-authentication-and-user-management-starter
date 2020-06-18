@@ -1,4 +1,15 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { LoginPayload } from './payloads/login.payload';
 import { RegisterPayload } from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
@@ -17,7 +28,14 @@ export class AuthController {
     try {
       return await this.authService.login(credentials);
     } catch (e) {
-      console.log(e);
+      throw new HttpException(
+        {
+          message: e.message,
+          status: HttpStatus.BAD_REQUEST,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+
     }
   }
 

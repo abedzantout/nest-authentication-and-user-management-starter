@@ -14,6 +14,7 @@ import { LoginPayload } from './payloads/login.payload';
 import { RegisterPayload } from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
 import { EmailVerificationPayload } from './payloads/email-verification.payload';
+import { User } from '../../shared/users/schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -24,7 +25,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async login(@Body() credentials: LoginPayload) {
+  public async login(@Body() credentials: LoginPayload): Promise<User> {
     try {
       return await this.authService.login(credentials);
     } catch (e) {
@@ -42,7 +43,7 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async register(@Body() credentials: RegisterPayload) {
+  public async register(@Body() credentials: RegisterPayload): Promise<User> {
     try {
       return await this.authService.register(credentials);
     } catch (e) {

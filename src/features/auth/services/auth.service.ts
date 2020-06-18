@@ -14,7 +14,7 @@ export class AuthService {
     return await this.usersService.addOne(userInformation);
   }
 
-  public async login(credentials: LoginCredentials): Promise<User | Error> {
+  public async login(credentials: LoginCredentials): Promise<User | any> {
     return await this.usersService.findUserAndPasswordById(credentials.email, credentials.password);
   }
 

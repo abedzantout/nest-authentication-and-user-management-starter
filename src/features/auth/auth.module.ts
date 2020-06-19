@@ -10,7 +10,7 @@ import { ConsentRegistry, ConsentRegistrySchema } from './schemas/consent-regist
 import { CoreModule } from '../../core/core.module';
 import { JwtService } from './services/jwt.service';
 
-const providers = [AuthService, JwtService];
+const providers = [AuthService];
 
 @Module({
   imports: [

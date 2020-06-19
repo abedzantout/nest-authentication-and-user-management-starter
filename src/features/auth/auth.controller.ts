@@ -31,6 +31,7 @@ export class AuthController {
     try {
       return await this.authService.login(credentials);
     } catch (e) {
+      console.log(e);
       throw new HttpException(
         {
           message: e.message,

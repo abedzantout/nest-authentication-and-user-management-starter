@@ -1,7 +1,16 @@
 import { DynamicModule, Module } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+
 import { MongoErrorHandlerInterceptor } from './interceptors/mongo-error-handler.interceptor';
 
-const MODULES = [];
+const MODULES = [
+  PassportModule.register({ defaultStrategy: 'jwt' }),
+  JwtModule.register({
+    secret: 'secret',
+    signOptions: { expiresIn: '10 hours' },
+  }),
+];
 const PROVIDERS = [MongoErrorHandlerInterceptor];
 
 @Module({

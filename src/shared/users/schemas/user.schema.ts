@@ -3,7 +3,16 @@ import { Document } from 'mongoose';
 
 import { UserRoles } from '../models/user.model';
 
-@Schema()
+@Schema({
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform: (doc, result) => {
+      result.id = result._id;
+      delete result._id;
+    },
+  },
+})
 export class User extends Document {
   @Prop({ required: true })
   first_name: string;

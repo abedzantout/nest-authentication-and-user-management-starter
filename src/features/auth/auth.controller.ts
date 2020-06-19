@@ -38,7 +38,6 @@ export class AuthController {
         },
         HttpStatus.BAD_REQUEST,
       );
-
     }
   }
 
@@ -49,14 +48,6 @@ export class AuthController {
     try {
       return await this.authService.register(credentials);
     } catch (e) {
-      // todo: handle exception
-      // throw new HttpException(
-      //   {
-      //     message: e.message,
-      //     status: HttpStatus.BAD_REQUEST,
-      //   },
-      //   HttpStatus.BAD_REQUEST,
-      // );
       throw e;
     }
   }

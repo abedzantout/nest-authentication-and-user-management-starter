@@ -8,7 +8,9 @@ import { EmailVerification, EmailVerificationSchema } from './schemas/email-veri
 import { ForgottenPassword, ForgottenPasswordSchema } from './schemas/forgotten-password.schema';
 import { ConsentRegistry, ConsentRegistrySchema } from './schemas/consent-registry.schema';
 import { CoreModule } from '../../core/core.module';
+import { JwtService } from './services/jwt.service';
 
+const providers = [AuthService, JwtService];
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { CoreModule } from '../../core/core.module';
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [...providers],
 })
 export class AuthModule {
 }

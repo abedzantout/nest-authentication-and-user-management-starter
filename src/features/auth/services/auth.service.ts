@@ -15,11 +15,13 @@ export class AuthService {
   }
 
   public async login(credentials: LoginCredentials): Promise<User | any> {
-    return await this.usersService.findUserAndPasswordById(credentials.email, credentials.password);
+    const user = await this.usersService.findUserAndPasswordById(credentials.email, credentials.password);
+
+    return user;
   }
 
   public async sendEmailForgotPassword(email: string) {
-    const user = this.usersService.getByEmail(email);
+    const user = this.usersService.findByEmail(email);
 
   }
 

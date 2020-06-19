@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { SchemaOptions } from '@nestjs/mongoose/dist/decorators/schema.decorator';
 
 import { UserRoles } from '../models/user.model';
 
-@Schema({
+const schemaOptions: SchemaOptions = {
   toJSON: {
     virtuals: true,
     versionKey: false,
@@ -12,7 +13,9 @@ import { UserRoles } from '../models/user.model';
       delete result._id;
     },
   },
-})
+};
+
+@Schema(schemaOptions)
 export class User extends Document {
   @Prop({ required: true })
   first_name: string;

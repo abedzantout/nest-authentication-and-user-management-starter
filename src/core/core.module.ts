@@ -3,6 +3,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 
 import { MongoErrorHandlerInterceptor } from './interceptors/mongo-error-handler.interceptor';
+import { ConfigService } from './config/config.service';
 
 const MODULES = [
   PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -11,7 +12,10 @@ const MODULES = [
     signOptions: { expiresIn: '10 hours' },
   }),
 ];
-const PROVIDERS = [MongoErrorHandlerInterceptor];
+const PROVIDERS = [
+  ConfigService,
+  MongoErrorHandlerInterceptor,
+];
 
 @Module({
   imports: [...MODULES],

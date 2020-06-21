@@ -4,6 +4,7 @@ import { SchemaOptions } from '@nestjs/mongoose/dist/decorators/schema.decorator
 
 import { UserRoles } from '../models/user.model';
 
+// todo: unify
 const schemaOptions: SchemaOptions = {
   toJSON: {
     virtuals: true,

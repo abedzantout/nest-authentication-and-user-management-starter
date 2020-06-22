@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
+import { v4 as uuidv4 } from 'uuid';
 import * as nodemailer from 'nodemailer';
 
 import { LoginCredentials, RegisterCredentials } from '../models/credentials.interface';
@@ -65,7 +66,7 @@ export class AuthService {
 
     return await this.emailVerificationModel.findOneAndUpdate({ email }, {
         email,
-        email_verification_token: 'token', // todo: change to guid
+        email_verification_token: uuidv4(),
         timestamp: new Date(),
       },
       { upsert: true, new: true })

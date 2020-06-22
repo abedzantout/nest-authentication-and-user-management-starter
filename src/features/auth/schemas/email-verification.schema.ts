@@ -20,7 +20,7 @@ export class EmailVerification extends Document {
   email_verification_token: string;
 
   @Prop({ required: true, type: Date })
-  timestamp: string;
+  timestamp: Date;
 }
 
 export const EmailVerificationSchema = SchemaFactory.createForClass(EmailVerification);

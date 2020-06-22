@@ -20,6 +20,10 @@ export class ConfigService {
     return process.env.MONGO_URI;
   }
 
+  get nodemailerConfig(): { nodemailer_email, nodemailer_password } {
+    return { nodemailer_email: process.env.NODEMAILER_EMAIL, nodemailer_password: process.env.NODEMAILER_PASSWORD };
+  }
+
   get JWT() {
     return {
       Key: process.env.JWT_KEY || 'secretKey',

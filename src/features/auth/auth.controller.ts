@@ -48,6 +48,7 @@ export class AuthController {
     try {
       return await this.authService.register(credentials);
     } catch (e) {
+      console.log(e);
       throw e;
     }
   }
@@ -55,7 +56,8 @@ export class AuthController {
   @Get('email/resend-verification/:email')
   public async sendEmailVerification(@Param() params: EmailVerificationPayload): Promise<any> {
     try {
-      return await this.authService.sendEmailVerification(params.email);
+      // return await this.authService.sendEmailVerification(params.email);
+      return null;
     } catch (e) {
 
     }

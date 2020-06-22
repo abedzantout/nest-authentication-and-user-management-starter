@@ -20,10 +20,10 @@ export class ConsentRegistry extends Document {
   checkbox_text: string;
 
   @Prop({ required: true, type: Date })
-  date: string;
+  date: Date;
 
-  @Prop({ required: true, type: Boolean })
-  privacy_policy: boolean;
+  @Prop({ required: true, type: String })
+  privacy_policy: string;
 
   @Prop({ required: true, type: Boolean })
   cookie_policy: boolean;

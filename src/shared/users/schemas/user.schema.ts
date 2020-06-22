@@ -32,6 +32,15 @@ export class User extends Document {
 
   @Prop(raw({
     email: { valid: { type: Boolean, default: false } },
+    facebook: {
+      user_id: String,
+    },
+    gmail: {
+      user_id: String,
+    },
+    github: {
+      user_id: String,
+    },
   }))
   auth?: Record<string, any>;
 

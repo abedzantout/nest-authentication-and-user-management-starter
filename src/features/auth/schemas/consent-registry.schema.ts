@@ -4,6 +4,7 @@ import { SchemaOptions } from '@nestjs/mongoose/dist/decorators/schema.decorator
 
 // todo: unify
 const schemaOptions: SchemaOptions = {
+  collection: 'consent-registry',
   toJSON: {
     virtuals: true,
     versionKey: false,

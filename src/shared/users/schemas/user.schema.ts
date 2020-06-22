@@ -44,6 +44,9 @@ export class User extends Document {
   }))
   auth?: Record<string, any>;
 
+  @Prop({ type: Object })
+  settings?: Record<string, any>;
+
   // todo: define enum
   @Prop()
   role: UserRoles;

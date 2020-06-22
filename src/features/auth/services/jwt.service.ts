@@ -3,6 +3,9 @@ import { User } from '../../../shared/users/schemas/user.schema';
 import { LoginCredentials } from '../models/credentials.interface';
 import { UsersService } from '../../../shared/users/services/users.service';
 
+/**
+ * @deprecated
+ */
 @Injectable()
 export class JwtService {
   constructor(private readonly usersService: UsersService) {

@@ -1,7 +1,7 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsUUID } from 'class-validator';
 
 export class EmailVerificationPayload {
-  @IsNotEmpty({ message: 'email required' })
-  @IsEmail()
-  email: string;
+  @IsNotEmpty({ message: 'Verification token required' })
+  @IsUUID()
+  token: string;
 }

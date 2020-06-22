@@ -6,7 +6,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
-  Post, UseInterceptors,
+  Post, Query, UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -53,7 +53,7 @@ export class AuthController {
     }
   }
 
-  @Get('email/resend-verification/:email')
+  @Get('resend-verification/:email')
   public async sendEmailVerification(@Param() params: EmailVerificationPayload): Promise<any> {
     try {
       // return await this.authService.sendEmailVerification(params.email);
@@ -63,20 +63,29 @@ export class AuthController {
     }
   }
 
+  @Get('verify')
+  public async verifyEmail(@Query() params: EmailVerificationPayload): Promise<any> {
+    try {
+      return await this.authService.verifyEmail(params.token);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   @Get('forgot-password/:email')
   async sendEmailForgotPassword(@Param() params: EmailVerificationPayload) {
     try {
-      return await this.authService.sendEmailForgotPassword(params.email);
+      // return await this.authService.sendEmailForgotPassword(params.email);
     } catch (e) {
 
     }
   }
 
-  @Post('email/reset-password')
+  @Post('reset-password')
   @HttpCode(HttpStatus.OK)
   public async resetPassword(@Param() params: EmailVerificationPayload) {
     try {
-      return await this.authService.resetPassword(params.email);
+      // return await this.authService.resetPassword(params.email);
     } catch (e) {
 
     }

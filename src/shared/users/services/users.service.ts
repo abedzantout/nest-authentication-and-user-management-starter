@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   public async updateOne(user: UserInterface): Promise<any> {
-    return await this.userModel.findOneAndUpdate({ id: user.id }, user).exec();
+    return await this.userModel.findOneAndUpdate({ _id: user.id }, user, { new: true }).exec();
   }
 
   public async findByIdAndDelete(id: string): Promise<any> {

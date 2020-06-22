@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { SchemaOptions } from '@nestjs/mongoose/dist/decorators/schema.decorator';
 
@@ -29,6 +29,11 @@ export class User extends Document {
 
   @Prop()
   password: string;
+
+  @Prop(raw({
+    email: { valid: { type: Boolean, default: false } },
+  }))
+  auth?: Record<string, any>;
 
   // todo: define enum
   @Prop()

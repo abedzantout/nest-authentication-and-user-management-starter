@@ -127,6 +127,21 @@ export class AuthService {
     }
   }
 
+  public async verifyEmail(token: string) {
+    const emailVerification = await this.emailVerificationModel.findOne({ email_verification_token: token });
+
+    if (emailVerification && emailVerification.email) {
+
+      return this.usersService.findByEmail(emailVerification.email).then(async user => {
+        user.auth.email.valid = true;
+        const updatedUser = await this.usersService.updateOne(user);
+        await this.emailVerificationModel.deleteOne({ email: user.email });
+        return updatedUser;
+      });
+    }
+    // todo: handle errors
+  }
+
   public async resetPassword(email: string) {
   }
 

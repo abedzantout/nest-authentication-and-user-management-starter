@@ -10,4 +10,5 @@ export interface UserInterface {
   readonly last_name: string;
   readonly password: string;
   readonly role: UserRoles;
+  readonly auth?: Record<string, any>
 }

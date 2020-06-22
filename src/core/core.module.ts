@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { MongoErrorHandlerInterceptor } from './interceptors/mongo-error-handler.interceptor';
 import { ConfigService } from './config/config.service';
+import { MailerService } from './mailer/mailer.service';
 
 const MODULES = [
   PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -15,6 +16,7 @@ const MODULES = [
 const PROVIDERS = [
   ConfigService,
   MongoErrorHandlerInterceptor,
+  MailerService,
 ];
 
 @Module({

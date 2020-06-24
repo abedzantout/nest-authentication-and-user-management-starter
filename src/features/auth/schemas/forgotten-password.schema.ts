@@ -21,7 +21,7 @@ export class ForgottenPassword extends Document {
   new_password_token: string;
 
   @Prop({ required: true, type: Date })
-  timestamp: string;
+  timestamp: Date;
 }
 
 export const ForgottenPasswordSchema = SchemaFactory.createForClass(ForgottenPassword);

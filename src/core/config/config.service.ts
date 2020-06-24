@@ -24,6 +24,10 @@ export class ConfigService {
     return { nodemailer_email: process.env.NODEMAILER_EMAIL, nodemailer_password: process.env.NODEMAILER_PASSWORD };
   }
 
+  get host(): string {
+    return process.env.HOST;
+  }
+
   get JWT() {
     return {
       Key: process.env.JWT_KEY || 'secretKey',

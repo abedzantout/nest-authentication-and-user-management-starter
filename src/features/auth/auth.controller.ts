@@ -66,6 +66,7 @@ export class AuthController {
   @Get('verify')
   public async verifyEmail(@Query() params: EmailVerificationPayload): Promise<any> {
     try {
+      // todo: login user automatically
       return await this.authService.verifyEmail(params.token);
     } catch (e) {
       console.log(e);
@@ -75,7 +76,7 @@ export class AuthController {
   @Get('forgot-password/:email')
   async sendEmailForgotPassword(@Param() params: EmailVerificationPayload) {
     try {
-      // return await this.authService.sendEmailForgotPassword(params.email);
+      return await this.authService.sendEmailForgotPassword(params.email);
     } catch (e) {
 
     }

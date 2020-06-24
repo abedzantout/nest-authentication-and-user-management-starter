@@ -80,8 +80,26 @@ export class AuthService {
     return { user, access_token };
   }
 
-  public async sendEmailForgotPassword(email: string) {
-    const user = this.usersService.findByEmail(email);
+  public async createForgottenPasswordToken(email: string) {
+    const forgottenPassword = await this.forgottenPasswordModel.findOne({ email });
+
+    if (forgottenPassword && ((new Date().getTime() - forgottenPassword.timestamp.getTime()) / 60000 < 15)) {
+      throw new HttpException('RESET_PASSWORD.EMAIL_SENDED_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    const forgottenPasswordModel = await this.forgottenPasswordModel.findOneAndUpdate(
+      { email: email },
+      {
+        email: email,
+        new_password_token: uuidv4(), // (Math.floor(Math.random() * (9000000)) + 1000000).toString(), //Generate 7 digits number,
+        timestamp: new Date(),
+      },
+      { upsert: true, new: true },
+    );
+
+    if (forgottenPasswordModel) {
+      return forgottenPasswordModel;
+    }
+    throw new HttpException('LOGIN.ERROR.GENERIC_ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
 
   }
 
@@ -101,12 +119,14 @@ export class AuthService {
         },
       });
 
+      const link = `${this.configService.host}auth/verify?token=${email_token}`;
       const mailOptions = {
         from: this.configService.nodemailerConfig.nodemailer_email,
         to: email, // list of receivers (separated by ,)
         subject: 'Verify Email',
         text: 'Verify Email',
-        html: 'Hi! <br><br> Thanks for your registration<br><br>' + `Here is your email token ${email_token}`,
+        html: 'Hi! <br><br> Thanks for your registration<br><br>' +
+          `Here is your email verification link: ${link}`,
       };
 
       const sent = await new Promise<boolean>(async function(resolve, reject) {

@@ -74,7 +74,7 @@ export class AuthController {
   }
 
   @Get('forgot-password/:email')
-  async sendEmailForgotPassword(@Param() params: EmailVerificationPayload) {
+  async sendEmailForgotPassword(@Param() params: any) {
     try {
       return await this.authService.sendEmailForgotPassword(params.email);
     } catch (e) {
@@ -82,7 +82,7 @@ export class AuthController {
     }
   }
 
-  @Post('reset-password')
+  @Post('reset-password/:token')
   @HttpCode(HttpStatus.OK)
   public async resetPassword(@Param() params: EmailVerificationPayload) {
     try {

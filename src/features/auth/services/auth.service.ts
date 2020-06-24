@@ -103,6 +103,52 @@ export class AuthService {
 
   }
 
+  public async sendEmailForgotPassword(email) {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    const tokenModel = await this.createForgottenPasswordToken(email);
+
+    console.log(tokenModel);
+
+    if (tokenModel && tokenModel.new_password_token) {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        requireTLS: true,
+        auth: {
+          user: this.configService.nodemailerConfig.nodemailer_email,
+          pass: this.configService.nodemailerConfig.nodemailer_password,
+        },
+      });
+
+      const link = `${this.configService.host}/auth/email/reset-password/${tokenModel.new_password_token}`;
+      const mailOptions = {
+        from: this.configService.nodemailerConfig.nodemailer_email,
+        to: email, // list of receivers (separated by ,)
+        subject: 'Verify Email',
+        text: 'Verify Email',
+        html: 'Hi! <br><br> Request Change Password<br><br>' +
+          `Here is your reset password link: ${link}`,
+      };
+
+      const sent = await new Promise<boolean>(async function(resolve, reject) {
+        return await transporter.sendMail(mailOptions, async (error, info) => {
+          if (error) {
+            console.log('Message sent: %s', error);
+            return reject(false);
+          }
+          console.log('Message sent: %s', info.messageId);
+          resolve(true);
+        });
+      });
+      return sent;
+    }
+    throw new HttpException('REGISTER.USER_NOT_REGISTERED', HttpStatus.FORBIDDEN);
+  }
+
   public async sendEmailVerification(email: string, email_token: string): Promise<boolean> {
     const emailVerificationModel = await this.emailVerificationModel.findOne({ email });
 

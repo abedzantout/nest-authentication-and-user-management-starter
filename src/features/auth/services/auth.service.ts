@@ -209,6 +209,7 @@ export class AuthService {
   }
 
   public async resetPassword(email: string) {
+
   }
 
   private async createToken(email: string, id: string) {

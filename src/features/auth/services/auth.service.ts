@@ -209,7 +209,19 @@ export class AuthService {
     // todo: handle errors
   }
 
-  public async resetPassword(email: string) {
+  public async resetPassword(email: string, forgot_password_token: string, new_password: string): Promise<boolean> {
+
+    try {
+      const forgotPasswordModel = await this.forgottenPasswordModel.findOne({ email });
+
+      if (forgotPasswordModel && forgotPasswordModel.new_password_token === forgot_password_token) {
+        await this.usersService.updateOnePassword(email, new_password);
+        await this.forgottenPasswordModel.deleteOne({ email });
+        return true;
+      }
+    } catch (e) {
+      throw new HttpException('RESET_PASSWORD.CHANGE_PASSWORD_ERROR', e);
+    }
 
   }
 

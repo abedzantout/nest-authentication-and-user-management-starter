@@ -17,6 +17,7 @@ import { EmailTokenVerificationPayload, EmailVerificationPayload } from './paylo
 import { User } from '../../shared/users/schemas/user.schema';
 import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
 import { ResponseError, ResponseSuccess } from '../../core/response/response';
+import { ForgotPasswordPayload } from './payloads/forgot-password.payload';
 
 @Controller('auth')
 @UseInterceptors(new MongoErrorHandlerInterceptor())
@@ -85,17 +86,20 @@ export class AuthController {
     try {
       return await this.authService.sendEmailForgotPassword(params.email);
     } catch (e) {
-
+      console.error(e);
     }
   }
 
   @Post('reset-password/:token')
   @HttpCode(HttpStatus.OK)
-  public async resetPassword(@Param() params: EmailTokenVerificationPayload) {
+  public async resetPassword(@Param() params: ForgotPasswordPayload) {
     try {
-      // return await this.authService.resetPassword(params.email);
+      await this.authService.resetPassword(params.email, params.forgot_password_token, params.new_password);
+
+      return new ResponseSuccess('RESET_PASSWORD.SUCCESS');
     } catch (e) {
 
+      return e;
     }
   }
 }

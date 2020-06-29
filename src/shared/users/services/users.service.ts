@@ -37,6 +37,12 @@ export class UsersService {
     return await this.userModel.findOneAndUpdate({ _id: user.id }, user, { new: true }).exec();
   }
 
+  public async updateOnePassword(email: string, new_password: string): Promise<User> {
+    const hashedPassword = await bcrypt.hash(new_password, 10);
+    return await this.userModel.findOneAndUpdate({ email },
+      { password: hashedPassword }, { new: true }).exec();
+  }
+
   public async findByIdAndDelete(id: string): Promise<any> {
     return await this.userModel.findByIdAndDelete(id).exec();
   }

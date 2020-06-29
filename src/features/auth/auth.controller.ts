@@ -13,9 +13,10 @@ import {
 import { LoginPayload } from './payloads/login.payload';
 import { RegisterPayload } from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
-import { EmailVerificationPayload } from './payloads/email-verification.payload';
+import { EmailTokenVerificationPayload, EmailVerificationPayload } from './payloads/email-verification.payload';
 import { User } from '../../shared/users/schemas/user.schema';
 import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
+import { ResponseError, ResponseSuccess } from '../../core/response/response';
 
 @Controller('auth')
 @UseInterceptors(new MongoErrorHandlerInterceptor())
@@ -56,15 +57,21 @@ export class AuthController {
   @Get('resend-verification/:email')
   public async sendEmailVerification(@Param() params: EmailVerificationPayload): Promise<any> {
     try {
-      // return await this.authService.sendEmailVerification(params.email);
-      return null;
-    } catch (e) {
+      const { email_verification_token } = await this.authService.createEmailVerificationToken(params.email);
 
+      const emailSent = await this.authService.sendEmailVerification(params.email, email_verification_token);
+
+      if (emailSent) {
+        return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
+      }
+      return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+    } catch (error) {
+      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
     }
   }
 
   @Get('verify')
-  public async verifyEmail(@Query() params: EmailVerificationPayload): Promise<any> {
+  public async verifyEmail(@Query() params: EmailTokenVerificationPayload): Promise<any> {
     try {
       // todo: login user automatically
       return await this.authService.verifyEmail(params.token);
@@ -84,7 +91,7 @@ export class AuthController {
 
   @Post('reset-password/:token')
   @HttpCode(HttpStatus.OK)
-  public async resetPassword(@Param() params: EmailVerificationPayload) {
+  public async resetPassword(@Param() params: EmailTokenVerificationPayload) {
     try {
       // return await this.authService.resetPassword(params.email);
     } catch (e) {

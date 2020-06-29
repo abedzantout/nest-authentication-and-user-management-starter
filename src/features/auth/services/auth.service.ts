@@ -57,7 +57,7 @@ export class AuthService {
     return await this.consentRegistryModel.create({ ...userConsent });
   }
 
-  private async createEmailVerificationToken(email: string): Promise<EmailVerification> {
+  public async createEmailVerificationToken(email: string): Promise<EmailVerification> {
     const emailVerification = await this.emailVerificationModel.findOne({ email });
 
     if (emailVerification && ((new Date().getTime() - emailVerification.timestamp.getTime()) / 60000 < 15)) {
@@ -149,6 +149,7 @@ export class AuthService {
     throw new HttpException('REGISTER.USER_NOT_REGISTERED', HttpStatus.FORBIDDEN);
   }
 
+  // TODO: remove email_token from here
   public async sendEmailVerification(email: string, email_token: string): Promise<boolean> {
     const emailVerificationModel = await this.emailVerificationModel.findOne({ email });
 

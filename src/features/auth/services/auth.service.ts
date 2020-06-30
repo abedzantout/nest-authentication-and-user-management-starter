@@ -219,6 +219,8 @@ export class AuthService {
         await this.forgottenPasswordModel.deleteOne({ email });
         return true;
       }
+
+      return false;
     } catch (e) {
       throw new HttpException('RESET_PASSWORD.CHANGE_PASSWORD_ERROR', e);
     }

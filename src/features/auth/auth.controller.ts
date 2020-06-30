@@ -94,9 +94,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   public async resetPassword(@Param() params: ForgotPasswordPayload) {
     try {
-      await this.authService.resetPassword(params.email, params.forgot_password_token, params.new_password);
-
-      return new ResponseSuccess('RESET_PASSWORD.SUCCESS');
+      const resetPassword = await this.authService.resetPassword(params.email, params.forgot_password_token, params.new_password);
+      if (resetPassword) {
+        return new ResponseSuccess('RESET_PASSWORD.SUCCESS');
+      }
+      return new ResponseError('RESET_PASSWORD.CHANGE_PASSWORD_ERROR');
     } catch (e) {
 
       return e;

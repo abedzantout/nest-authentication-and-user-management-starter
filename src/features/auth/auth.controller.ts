@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpCode,
-  HttpException,
   HttpStatus,
   Param,
   Post, Query, UseInterceptors,
@@ -18,6 +17,7 @@ import { User } from '../../shared/users/schemas/user.schema';
 import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
 import { ResponseError, ResponseSuccess } from '../../core/response/response';
 import { ForgotPasswordPayload } from './payloads/forgot-password.payload';
+import { ResponseInterface } from '../../core/response/response.interface';
 
 @Controller('auth')
 @UseInterceptors(new MongoErrorHandlerInterceptor())
@@ -29,29 +29,24 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async login(@Body() credentials: LoginPayload): Promise<User> {
+  public async login(@Body() credentials: LoginPayload): Promise<ResponseInterface> {
     try {
-      return await this.authService.login(credentials);
+      const response = await this.authService.login(credentials);
+      return new ResponseSuccess('LOGIN.SUCCESS', response);
     } catch (e) {
-      throw new HttpException(
-        {
-          message: e.message,
-          status: HttpStatus.BAD_REQUEST,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      return new ResponseError('LOGIN.ERROR', e.message);
     }
   }
 
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async register(@Body() credentials: RegisterPayload): Promise<User> {
+  public async register(@Body() credentials: RegisterPayload): Promise<ResponseInterface> {
     try {
-      return await this.authService.register(credentials);
+      const response = await this.authService.register(credentials);
+      return new ResponseSuccess('REGISTER.SUCCESS', response);
     } catch (e) {
-      console.log(e);
-      throw e;
+      return new ResponseError('REGISTER.ERROR', e.message);
     }
   }
 

@@ -76,6 +76,8 @@ export class AuthService {
 
   public async login(credentials: LoginCredentials): Promise<User | any> {
     const user: User | any = await this.usersService.findUserAndPasswordById(credentials.email, credentials.password);
+    if (!user) throw Error('LOGIN.USER_NOT_FOUND');
+    if (!user.auth.email.valid) throw Error('LOGIN.EMAIL_NOT_VERIFIED');
     const access_token = await this.createToken(user.email, user.id);
     return { user, access_token };
   }

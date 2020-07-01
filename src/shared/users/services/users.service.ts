@@ -55,7 +55,7 @@ export class UsersService {
       return user;
     }
 
-    throw Error('Wrong email/password combination');
+    throw Error('LOGIN.ERROR');
 
   }
 }

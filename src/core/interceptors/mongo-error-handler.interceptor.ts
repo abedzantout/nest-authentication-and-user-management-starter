@@ -10,6 +10,9 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MongoError } from 'mongodb';
 
+/**
+ * @deprecated
+ */
 @Injectable()
 export class MongoErrorHandlerInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {

@@ -111,8 +111,6 @@ export class AuthService {
 
     const tokenModel = await this.createForgottenPasswordToken(email);
 
-    console.log(tokenModel);
-
     if (tokenModel && tokenModel.new_password_token) {
       const transporter = nodemailer.createTransport({
         service: 'gmail',

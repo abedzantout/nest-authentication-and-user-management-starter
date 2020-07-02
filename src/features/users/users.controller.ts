@@ -4,18 +4,21 @@ import { UserPayload } from './payloads/user.payload';
 import { UserUpdatePayload } from './payloads/user-update.payload';
 import { User } from '../../shared/users/schemas/user.schema';
 import { UserDeletePayload } from './payloads/user-delete.payload';
+import { InvitationService } from './services/invitation.service';
+import { InvitationPayload } from './payloads/invitation.payload';
 
 @Controller('users')
 export class UsersController {
 
-  constructor(private readonly usersService: UsersService) {
+  constructor(private readonly usersService: UsersService,
+              private readonly invitationService: InvitationService) {
   }
 
   @Post()
   @UsePipes(new ValidationPipe())
-  async addUser(@Body() createUser: UserPayload): Promise<User> {
+  async addUser(@Body() createInvitation: InvitationPayload): Promise<any> {
     try {
-      return await this.usersService.addOne(createUser);
+      return await this.invitationService.inviteUser(createInvitation.email);
     } catch (e) {
       console.log(e);
     }

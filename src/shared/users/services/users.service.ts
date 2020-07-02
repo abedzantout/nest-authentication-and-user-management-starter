@@ -7,15 +7,12 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../schemas/user.schema';
 
 import { UserInterface } from '../models/user.model';
-import { ConfigService } from '../../../core/config/config.service';
-
 
 @Injectable()
 export class UsersService {
 
   constructor(@InjectModel(User.name)
-              private readonly userModel: Model<User>,
-              private readonly configService: ConfigService) {
+              private readonly userModel: Model<User>) {
   }
 
   public async getAll(): Promise<User[]> {
@@ -61,7 +58,4 @@ export class UsersService {
 
   }
 
-  public async inviteUser(email: string): Promise<any> {
-
-  }
 }

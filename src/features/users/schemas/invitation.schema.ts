@@ -17,7 +17,7 @@ export class Invitation extends Document {
   @Prop({ required: true, type: String, trim: true, unique: true, lowercase: true })
   email: string;
 
-  @Prop({ required: true, type: String })
+  @Prop({ required: true, type: String, unique: true })
   invitation_token: string;
 
   @Prop({ required: true, type: Date })

@@ -4,10 +4,12 @@ export class ForgotPasswordPayload {
   @IsEmail()
   email: string;
 
-  @IsNotEmpty({ message: 'Verification token required' })
-  @IsUUID()
-  forgot_password_token: string;
-
   @IsNotEmpty()
   new_password: string;
+}
+
+export class ForgotPasswordParamPayload {
+  @IsNotEmpty({ message: 'Verification token required' })
+  @IsUUID()
+  token: string;
 }

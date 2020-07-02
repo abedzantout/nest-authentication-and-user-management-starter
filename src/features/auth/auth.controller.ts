@@ -16,7 +16,7 @@ import { EmailTokenVerificationPayload, EmailVerificationPayload } from './paylo
 import { User } from '../../shared/users/schemas/user.schema';
 import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
 import { ResponseError, ResponseSuccess } from '../../core/response/response';
-import { ForgotPasswordPayload } from './payloads/forgot-password.payload';
+import { ForgotPasswordParamPayload, ForgotPasswordPayload } from './payloads/forgot-password.payload';
 import { ResponseInterface } from '../../core/response/response.interface';
 
 @Controller('auth')
@@ -87,15 +87,15 @@ export class AuthController {
 
   @Post('reset-password/:token')
   @HttpCode(HttpStatus.OK)
-  public async resetPassword(@Param() params: ForgotPasswordPayload) {
+  public async resetPassword(@Param() params: ForgotPasswordParamPayload, @Body() forgotPassword: ForgotPasswordPayload) {
     try {
-      const resetPassword = await this.authService.resetPassword(params.email, params.forgot_password_token, params.new_password);
+      const resetPassword = await this.authService.resetPassword(forgotPassword.email,
+        params.token, forgotPassword.new_password);
       if (resetPassword) {
         return new ResponseSuccess('RESET_PASSWORD.SUCCESS');
       }
       return new ResponseError('RESET_PASSWORD.CHANGE_PASSWORD_ERROR');
     } catch (e) {
-
       return e;
     }
   }

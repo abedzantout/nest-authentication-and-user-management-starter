@@ -16,6 +16,7 @@ import { ConsentRegistry } from '../schemas/consent-registry.schema';
 import { EmailVerification } from '../schemas/email-verification.schema';
 import { ForgottenPassword } from '../schemas/forgotten-password.schema';
 import { ConfigService } from '../../../core/config/config.service';
+import { InvitationService } from '../../../shared/invitation/services/invitation.service';
 
 
 @Injectable()
@@ -23,13 +24,13 @@ export class AuthService {
   constructor(private readonly usersService: UsersService,
               private readonly jwtService: JwtService,
               private readonly configService: ConfigService,
+              private readonly invitationService: InvitationService,
               @InjectModel(ConsentRegistry.name)
               private readonly consentRegistryModel: Model<ConsentRegistry>,
               @InjectModel(EmailVerification.name)
               private readonly emailVerificationModel: Model<EmailVerification>,
               @InjectModel(ForgottenPassword.name)
               private readonly forgottenPasswordModel: Model<ForgottenPassword>,
-
   ) {
   }
 
@@ -47,7 +48,15 @@ export class AuthService {
 
   public async registerByInvitation(invitation_token: string, userInfo: RegisterCredentials): Promise<User> {
 
-    return null;
+    const invitation = await this.invitationService.findOne(userInfo.email, invitation_token);
+    const user = await this.usersService.findByEmail(userInfo.email);
+
+    if (!invitation) throw Error('INVITATION.NOT_FOUND');
+    if (user) throw Error('INVITATION.USER_ALREADY_EXISTS');
+
+    await this.invitationService.deleteOne(invitation_token);
+
+    return await this.usersService.addOne(userInfo);
   }
 
   public async saveUserConsent(email: string): Promise<ConsentRegistry> {

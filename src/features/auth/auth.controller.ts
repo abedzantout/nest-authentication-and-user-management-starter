@@ -13,7 +13,6 @@ import { LoginPayload } from './payloads/login.payload';
 import { RegisterByInvitationParamPayload, RegisterPayload } from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
 import { EmailTokenVerificationPayload, EmailVerificationPayload } from './payloads/email-verification.payload';
-import { User } from '../../shared/users/schemas/user.schema';
 import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
 import { ResponseError, ResponseSuccess } from '../../core/response/response';
 import { ForgotPasswordParamPayload, ForgotPasswordPayload } from './payloads/forgot-password.payload';
@@ -57,9 +56,9 @@ export class AuthController {
                                     @Body() credentials: RegisterPayload): Promise<ResponseInterface> {
     try {
       const response = await this.authService.registerByInvitation(params.invitation_token, credentials);
-      return new ResponseSuccess('REGISTER.SUCCESS', response);
+      return new ResponseSuccess('INVITATION.REGISTER_SUCCESS', response);
     } catch (e) {
-      return new ResponseError('REGISTER.ERROR', e.message);
+      return new ResponseError('INVITATION.REGISTER_ERROR', e.message);
     }
   }
 

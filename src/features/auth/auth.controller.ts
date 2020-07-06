@@ -10,7 +10,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { LoginPayload } from './payloads/login.payload';
-import { RegisterPayload } from './payloads/register.payload';
+import { RegisterByInvitationParamPayload, RegisterPayload } from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
 import { EmailTokenVerificationPayload, EmailVerificationPayload } from './payloads/email-verification.payload';
 import { User } from '../../shared/users/schemas/user.schema';
@@ -44,6 +44,19 @@ export class AuthController {
   public async register(@Body() credentials: RegisterPayload): Promise<ResponseInterface> {
     try {
       const response = await this.authService.register(credentials);
+      return new ResponseSuccess('REGISTER.SUCCESS', response);
+    } catch (e) {
+      return new ResponseError('REGISTER.ERROR', e.message);
+    }
+  }
+
+  @Post('register/:invitation_token')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe())
+  public async registerByInvitation(@Param() params: RegisterByInvitationParamPayload,
+                                    @Body() credentials: RegisterPayload): Promise<ResponseInterface> {
+    try {
+      const response = await this.authService.registerByInvitation(params.invitation_token, credentials);
       return new ResponseSuccess('REGISTER.SUCCESS', response);
     } catch (e) {
       return new ResponseError('REGISTER.ERROR', e.message);

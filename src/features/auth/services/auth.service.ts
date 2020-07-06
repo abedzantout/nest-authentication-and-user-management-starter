@@ -29,6 +29,7 @@ export class AuthService {
               private readonly emailVerificationModel: Model<EmailVerification>,
               @InjectModel(ForgottenPassword.name)
               private readonly forgottenPasswordModel: Model<ForgottenPassword>,
+
   ) {
   }
 
@@ -42,6 +43,11 @@ export class AuthService {
     await this.sendEmailVerification(user.email, createVerificationToken.email_verification_token);
 
     return user;
+  }
+
+  public async registerByInvitation(invitation_token: string, userInfo: RegisterCredentials): Promise<User> {
+
+    return null;
   }
 
   public async saveUserConsent(email: string): Promise<ConsentRegistry> {

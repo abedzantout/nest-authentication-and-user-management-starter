@@ -69,4 +69,7 @@ export class InvitationService {
   public async deleteOne(invitation_token: string): Promise<any> {
     return await this.invitationModel.deleteOne({ invitation_token }).exec();
   }
+  public async findOneByInvitationToken(invitation_token: string): Promise<Invitation> {
+    return await this.invitationModel.findOne({  invitation_token }).exec();
+  }
 }

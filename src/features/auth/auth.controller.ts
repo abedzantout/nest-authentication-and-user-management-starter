@@ -97,6 +97,16 @@ export class AuthController {
     }
   }
 
+  @Get('reset-password/:token')
+  @HttpCode(HttpStatus.OK)
+  public async getEmailForResetPassword(@Param() params: ForgotPasswordParamPayload) {
+    try {
+      return this.authService.getEmailByForgotPasswordToken(params.token);
+    } catch (e) {
+      return e;
+    }
+  }
+
   @Post('reset-password/:token')
   @HttpCode(HttpStatus.OK)
   public async resetPassword(@Param() params: ForgotPasswordParamPayload, @Body() forgotPassword: ForgotPasswordPayload) {

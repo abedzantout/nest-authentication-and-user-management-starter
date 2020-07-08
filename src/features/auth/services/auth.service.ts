@@ -17,6 +17,7 @@ import { EmailVerification } from '../schemas/email-verification.schema';
 import { ForgottenPassword } from '../schemas/forgotten-password.schema';
 import { ConfigService } from '../../../core/config/config.service';
 import { InvitationService } from '../../../shared/invitation/services/invitation.service';
+import { Invitation } from '../../../shared/invitation/schemas/invitation.schema';
 
 
 @Injectable()
@@ -240,6 +241,15 @@ export class AuthService {
     }
 
   }
+
+  public async getEmailByForgotPasswordToken(new_password_token: string): Promise<ForgottenPassword> {
+    return await this.forgottenPasswordModel.findOne({ new_password_token }).exec();
+  }
+
+  public async getEmailByInvitationToken(invitation_token: string): Promise<Invitation> {
+    return await this.invitationService.findOneByInvitationToken(invitation_token);
+  }
+
 
   private async createToken(email: string, id: string) {
     const payload = { email, sub: id };

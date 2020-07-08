@@ -3,6 +3,12 @@
   "version": "0.0.0",
   "description": "",
   "author": "Techhive.IO LLC",
+  "contributors": [
+    {
+      "email": "abed@techhive.io",
+      "name": "Abdul Rahman Zantout"
+    }
+  ],
   "private": true,
   "license": "CHECK LICENSE UNDER LICENSE.md",
   "scripts": {

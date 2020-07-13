@@ -92,7 +92,7 @@ Want to start contributing to open source with the Nest Authentication and User 
 
 Leave your mark and join the growing team of contributors!
 
-Get started by checking out list of open [issues](<(https://github.com/techhiveIO/nest-authentication-and-user-management-starter/issues)>)
+Get started by checking out list of [open issues](https://github.com/techhiveIO/nest-authentication-and-user-management-starter/issues)
 and reading [Contributor Guide](https://github.com/techhiveIO/nest-authentication-and-user-management-starter/blob/master/CONTRIBUTING.md)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->

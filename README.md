@@ -3,18 +3,19 @@
 </p>
   
 
-# Nest Js Authentication and User Management Starter Kit 
+# Nest Authentication and User Management Starter 
 
 by [@techhive.IO](https://www.techhive.io/)
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
+[Nest Js Authentication and User Management Starter](https://github.com/techhiveIO/nest-authentication-and-user-management-starter) 
+is a starter pack for seamlessly kick-starting your API development with the industry's 
+and TechHive.IO's best practices and recommendations.
 
 ## Table of Content
 
-- [Live Demo](https://nextjs-static-starter-kit.netlify.com/)
+- [Live Demo](https://techhive.io)
 - [Getting Started](#setting-started)
 - [Useful Commands](#useful-commands)
 - [Goals](#goals)
@@ -87,12 +88,12 @@ try to resolve it as soon as possible
 
 ## Contributors
 
-Want to start contributing to open source with Next.Js ?
+Want to start contributing to open source with the Nest Authentication and User Management Starter  ?
 
 Leave your mark and join the growing team of contributors!
 
-Get started by checking out list of open [issues](<(https://github.com/techhiveIO/nextjs-static-starter-kit/issues)>)
-and reading [Contributor Guide](https://github.com/techhiveIO/nextjs-static-starter-kit/blob/master/CONTRIBUTING.md)
+Get started by checking out list of open [issues](<(https://github.com/techhiveIO/nest-authentication-and-user-management-starter/issues)>)
+and reading [Contributor Guide](https://github.com/techhiveIO/nest-authentication-and-user-management-starter/blob/master/CONTRIBUTING.md)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->

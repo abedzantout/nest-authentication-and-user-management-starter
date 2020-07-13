@@ -28,8 +28,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run format"
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "dependencies": {
     "@nestjs/common": "^7.3.2",
@@ -53,6 +59,8 @@
     "uuid": "^8.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
     "@nestjs/cli": "^7.4.1",
     "@nestjs/schematics": "^7.0.1",
     "@nestjs/testing": "^7.3.2",
@@ -70,6 +78,7 @@
     "husky": "^4.2.5",
     "jest": "26.1.0",
     "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
     "supertest": "^4.0.2",
     "ts-jest": "26.1.2",
     "ts-loader": "^8.0.0",

@@ -12,8 +12,7 @@ export class InvitationService {
     private readonly mailerService: MailerService,
     @InjectModel(Invitation.name)
     private readonly invitationModel: Model<Invitation>,
-  ) {
-  }
+  ) {}
 
   public async inviteUser(email: string): Promise<boolean> {
     const invitation = await this.invitationModel.create({

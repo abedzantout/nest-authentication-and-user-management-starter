@@ -1,10 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
-import * as nodemailer from 'nodemailer';
 
 import {
   LoginCredentials,
@@ -19,7 +18,6 @@ import { Invitation } from '../../../shared/invitation/schemas/invitation.schema
 import { User } from '../../../shared/users/schemas/user.schema';
 
 // services
-import { ConfigService } from '../../../core/config/config.service';
 import { InvitationService } from '../../../shared/invitation/services/invitation.service';
 import { MailerService } from '../../../core/mailer/mailer.service';
 import { UsersService } from '../../../shared/users/services/users.service';
@@ -29,7 +27,6 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
     private readonly invitationService: InvitationService,
     private readonly mailerService: MailerService,
     @InjectModel(ConsentRegistry.name)

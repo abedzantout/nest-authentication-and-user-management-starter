@@ -14,21 +14,27 @@ import { UserUpdatePayload } from './payloads/user-update.payload';
 import { UserDeletePayload } from './payloads/user-delete.payload';
 import { InvitationPayload } from './payloads/invitation.payload';
 import { InvitationService } from '../../shared/invitation/services/invitation.service';
+import { ResponseError, ResponseSuccess } from '../../core/response/response';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly invitationService: InvitationService,
-  ) {}
+  ) {
+  }
 
   @Post()
   @UsePipes(new ValidationPipe())
   async addUser(@Body() createInvitation: InvitationPayload): Promise<any> {
     try {
-      return await this.invitationService.inviteUser(createInvitation.email);
+      const invitationEmailSent = await this.invitationService.inviteUser(createInvitation.email);
+      if (invitationEmailSent) {
+        return new ResponseSuccess('USERS.INVITATION_EMAIL_SENT', null);
+      }
+      return new ResponseError('USERS.ERROR_INVITING_USER');
     } catch (e) {
-      console.log(e);
+      return new ResponseError('USERS.ERROR_ADDING_USER', e);
     }
   }
 
@@ -36,14 +42,16 @@ export class UsersController {
   async getUsers() {
     try {
       return await this.usersService.getAll();
-    } catch (e) {}
+    } catch (e) {
+    }
   }
 
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     try {
       return await this.usersService.getById(id);
-    } catch (e) {}
+    } catch (e) {
+    }
   }
 
   @Patch()
@@ -51,7 +59,8 @@ export class UsersController {
   async updateUser(@Body() updatedUser: UserUpdatePayload) {
     try {
       return await this.usersService.updateOne(updatedUser);
-    } catch (e) {}
+    } catch (e) {
+    }
   }
 
   @Delete(':id')

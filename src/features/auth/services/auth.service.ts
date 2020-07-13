@@ -35,8 +35,7 @@ export class AuthService {
     private readonly emailVerificationModel: Model<EmailVerification>,
     @InjectModel(ForgottenPassword.name)
     private readonly forgottenPasswordModel: Model<ForgottenPassword>,
-  ) {
-  }
+  ) {}
 
   public async register(
     userInformation: RegisterCredentials,
@@ -86,7 +85,7 @@ export class AuthService {
     if (
       emailVerification &&
       (new Date().getTime() - emailVerification.timestamp.getTime()) / 60000 <
-      15
+        15
     ) {
       throw new Error('LOGIN.EMAIL_SENT_RECENTLY');
     }
@@ -123,7 +122,7 @@ export class AuthService {
     if (
       forgottenPassword &&
       (new Date().getTime() - forgottenPassword.timestamp.getTime()) / 60000 <
-      15
+        15
     ) {
       throw new Error('RESET_PASSWORD.EMAIL_SENT_RECENTLY');
     }

@@ -38,15 +38,15 @@ export class MailerService {
   }
 
   private constructMailOptions({
-    email,
-    subject,
-    text,
-    html,
-    linkText,
-    link,
-  }: MailerOptions) {
+                                 email,
+                                 subject,
+                                 text,
+                                 html,
+                                 linkText,
+                                 link,
+                               }: MailerOptions) {
     return {
-      from: this.host,
+      from: this.configService.nodemailerConfig.nodemailer_email,
       to: email, // list of receivers (separated by ,)
       subject,
       text, // plain text body

@@ -38,7 +38,8 @@ export class AuthService {
     private readonly emailVerificationModel: Model<EmailVerification>,
     @InjectModel(ForgottenPassword.name)
     private readonly forgottenPasswordModel: Model<ForgottenPassword>,
-  ) {}
+  ) {
+  }
 
   public async register(
     userInformation: RegisterCredentials,
@@ -88,12 +89,9 @@ export class AuthService {
     if (
       emailVerification &&
       (new Date().getTime() - emailVerification.timestamp.getTime()) / 60000 <
-        15
+      15
     ) {
-      throw new HttpException(
-        'LOGIN.EMAIL_SENT_RECENTLY',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new Error('LOGIN.EMAIL_SENT_RECENTLY');
     }
 
     return await this.emailVerificationModel
@@ -128,12 +126,9 @@ export class AuthService {
     if (
       forgottenPassword &&
       (new Date().getTime() - forgottenPassword.timestamp.getTime()) / 60000 <
-        15
+      15
     ) {
-      throw new HttpException(
-        'RESET_PASSWORD.EMAIL_SENT_RECENTLY',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new Error('RESET_PASSWORD.EMAIL_SENT_RECENTLY');
     }
     const forgottenPasswordModel = await this.forgottenPasswordModel.findOneAndUpdate(
       { email: email },
@@ -148,59 +143,29 @@ export class AuthService {
     if (forgottenPasswordModel) {
       return forgottenPasswordModel;
     }
-    throw new HttpException(
-      'LOGIN.ERROR.GENERIC_ERROR',
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
+
+    throw new Error('LOGIN.ERROR.GENERIC_ERROR');
   }
 
-  public async sendEmailForgotPassword(email) {
+  public async sendEmailForgotPassword(email: string): Promise<boolean> {
     const user = await this.usersService.findByEmail(email);
-    if (!user)
-      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    if (!user) throw new Error('LOGIN.USER_NOT_FOUND');
 
     const tokenModel = await this.createForgottenPasswordToken(email);
 
     if (tokenModel && tokenModel.new_password_token) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        auth: {
-          user: this.configService.nodemailerConfig.nodemailer_email,
-          pass: this.configService.nodemailerConfig.nodemailer_password,
-        },
-      });
-
-      const link = `${this.configService.host}/auth/email/reset-password/${tokenModel.new_password_token}`;
-      const mailOptions = {
-        from: this.configService.nodemailerConfig.nodemailer_email,
-        to: email, // list of receivers (separated by ,)
-        subject: 'Verify Email',
-        text: 'Verify Email',
-        html:
-          'Hi! <br><br> Request Change Password<br><br>' +
-          `Here is your reset password link: ${link}`,
+      const mail = {
+        email,
+        text: 'Request Change Password',
+        html: 'Hi! <br><br> Thanks for your registration<br><br>',
+        link: `/auth/email/reset-password/${tokenModel.new_password_token}`,
+        linkText: 'Request Change Password',
+        subject: 'Verify your email',
       };
-
-      const sent = await new Promise<boolean>(async function (resolve, reject) {
-        return await transporter.sendMail(mailOptions, async (error, info) => {
-          if (error) {
-            console.log('Message sent: %s', error);
-            return reject(false);
-          }
-          console.log('Message sent: %s', info.messageId);
-          resolve(true);
-        });
-      });
-      return sent;
+      return this.mailerService.sendEmail(mail);
     }
-    throw new HttpException(
-      'REGISTER.USER_NOT_REGISTERED',
-      HttpStatus.FORBIDDEN,
-    );
+
+    throw new Error('REGISTER.USER_NOT_REGISTERED');
   }
 
   // TODO: remove email_token from here
@@ -216,40 +181,6 @@ export class AuthService {
       emailVerificationModel &&
       emailVerificationModel.email_verification_token
     ) {
-      // const transporter = nodemailer.createTransport({
-      //   service: 'gmail',
-      //   host: 'smtp.gmail.com',
-      //   port: 587,
-      //   secure: false,
-      //   requireTLS: true,
-      //   auth: {
-      //     user: this.configService.nodemailerConfig.nodemailer_email,
-      //     pass: this.configService.nodemailerConfig.nodemailer_password,
-      //   },
-      // });
-      //
-      // const link = `${this.configService.host}auth/verify?token=${email_token}`;
-      // const mailOptions = {
-      //   from: this.configService.nodemailerConfig.nodemailer_email,
-      //   to: email, // list of receivers (separated by ,)
-      //   subject: 'Verify Email',
-      //   text: 'Verify Email',
-      //   html: 'Hi! <br><br> Thanks for your registration<br><br>' +
-      //     `Here is your email verification link: ${link}`,
-      // };
-      //
-      // const sent = await new Promise<boolean>(async function(resolve, reject) {
-      //   return await transporter.sendMail(mailOptions, async (error, info) => {
-      //     if (error) {
-      //       console.log('Message sent: %s', error);
-      //       return reject(false);
-      //     }
-      //     console.log('Message sent: %s', info.messageId);
-      //     resolve(true);
-      //   });
-      // });
-      //
-      // return sent;
       const mail = {
         email,
         text: 'Here is your email verification link',
@@ -259,12 +190,8 @@ export class AuthService {
         subject: 'Verify your email',
       };
       return this.mailerService.sendEmail(mail);
-    } else {
-      throw new HttpException(
-        'REGISTER.USER_NOT_REGISTERED',
-        HttpStatus.FORBIDDEN,
-      );
     }
+    throw new Error('REGISTRATION.ERROR.MAIL_NOT_SENT');
   }
 
   public async verifyEmail(token: string): Promise<boolean> {

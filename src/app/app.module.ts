@@ -9,7 +9,6 @@ import { FeaturesModule } from '../features/features.module';
 import { SharedModule } from '../shared/shared.module';
 import { CoreModule } from '../core/core.module';
 
-
 const mongooseOptions: MongooseModuleOptions = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
@@ -22,12 +21,14 @@ const mongooseOptions: MongooseModuleOptions = {
   imports: [
     ConfigModule.forRoot(),
     CoreModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGODB_CONNECTION_STRING, mongooseOptions),
+    MongooseModule.forRoot(
+      process.env.MONGODB_CONNECTION_STRING,
+      mongooseOptions,
+    ),
     SharedModule,
     FeaturesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule {}

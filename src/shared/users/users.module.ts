@@ -7,9 +7,12 @@ import { User, UserSchema } from './schemas/user.schema';
 const providers = [UsersService];
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema, collection: 'users' }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema, collection: 'users' },
+    ]),
+  ],
   providers: [...providers],
   exports: [...providers],
 })
-export class SharedUsersModule {
-}
+export class SharedUsersModule {}

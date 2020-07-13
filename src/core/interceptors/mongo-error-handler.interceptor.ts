@@ -16,24 +16,25 @@ import { MongoError } from 'mongodb';
 @Injectable()
 export class MongoErrorHandlerInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    return next.handle()
-      .pipe(catchError(error => {
+    return next.handle().pipe(
+      catchError((error) => {
         if (error instanceof MongoError && error.code === 11000) {
-          throw new NotFoundException(
-            {
-              message: MongoErrorHandlerInterceptor.handleDuplicationUserMessage(context.getHandler().name),
-              status: HttpStatus.NOT_FOUND,
-            },
-          );
+          throw new NotFoundException({
+            message: MongoErrorHandlerInterceptor.handleDuplicationUserMessage(
+              context.getHandler().name,
+            ),
+            status: HttpStatus.NOT_FOUND,
+          });
         } else {
           throw error;
         }
-      }));
+      }),
+    );
   }
 
   private static handleDuplicationUserMessage(handlerName: string) {
     switch (handlerName) {
-      case 'register' : {
+      case 'register': {
         return 'User already exists';
       }
 
@@ -43,5 +44,3 @@ export class MongoErrorHandlerInterceptor implements NestInterceptor {
     }
   }
 }
-
-

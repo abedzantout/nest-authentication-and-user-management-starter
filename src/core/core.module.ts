@@ -13,11 +13,7 @@ const MODULES = [
     signOptions: { expiresIn: '10 hours' },
   }),
 ];
-const PROVIDERS = [
-  ConfigService,
-  MongoErrorHandlerInterceptor,
-  MailerService,
-];
+const PROVIDERS = [ConfigService, MongoErrorHandlerInterceptor, MailerService];
 
 @Module({
   imports: [...MODULES],
@@ -25,7 +21,6 @@ const PROVIDERS = [
   exports: [...MODULES, ...PROVIDERS],
 })
 export class CoreModule {
-
   static forRoot(entities = [], options?): DynamicModule {
     return {
       module: CoreModule,
@@ -39,5 +34,4 @@ export class CoreModule {
       exports: [...PROVIDERS],
     };
   }
-
 }

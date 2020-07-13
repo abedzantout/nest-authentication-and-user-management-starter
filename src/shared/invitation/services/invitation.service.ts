@@ -10,16 +10,18 @@ import { Invitation } from '../schemas/invitation.schema';
 
 @Injectable()
 export class InvitationService {
-
   constructor(
     private readonly configService: ConfigService,
     @InjectModel(Invitation.name)
-    private readonly invitationModel: Model<Invitation>) {
-  }
+    private readonly invitationModel: Model<Invitation>,
+  ) {}
 
   public async inviteUser(email: string): Promise<any> {
-
-    const invitation = await this.invitationModel.create({ email, invitation_token: uuidv4(), timestamp: new Date() });
+    const invitation = await this.invitationModel.create({
+      email,
+      invitation_token: uuidv4(),
+      timestamp: new Date(),
+    });
 
     if (invitation && invitation.invitation_token) {
       const transporter = nodemailer.createTransport({
@@ -40,11 +42,12 @@ export class InvitationService {
         to: email, // list of receivers (separated by ,)
         subject: 'Invitation Email',
         text: 'Invitation Email',
-        html: 'Hi! <br><br> You have been invited to join the platform<br><br>' +
+        html:
+          'Hi! <br><br> You have been invited to join the platform<br><br>' +
           `Here is your invitation link: ${link}`,
       };
 
-      const sent = await new Promise<boolean>(async function(resolve, reject) {
+      const sent = await new Promise<boolean>(async function (resolve, reject) {
         return await transporter.sendMail(mailOptions, async (error, info) => {
           if (error) {
             console.log('Message sent: %s', error);
@@ -57,19 +60,25 @@ export class InvitationService {
 
       return sent;
     } else {
-
       throw Error('INVITATION.ERROR');
     }
   }
 
-  public async findOne(email: string, invitation_token: string): Promise<Invitation> {
-    return await this.invitationModel.findOne({ email, invitation_token }).exec();
+  public async findOne(
+    email: string,
+    invitation_token: string,
+  ): Promise<Invitation> {
+    return await this.invitationModel
+      .findOne({ email, invitation_token })
+      .exec();
   }
 
   public async deleteOne(invitation_token: string): Promise<any> {
     return await this.invitationModel.deleteOne({ invitation_token }).exec();
   }
-  public async findOneByInvitationToken(invitation_token: string): Promise<Invitation> {
-    return await this.invitationModel.findOne({  invitation_token }).exec();
+  public async findOneByInvitationToken(
+    invitation_token: string,
+  ): Promise<Invitation> {
+    return await this.invitationModel.findOne({ invitation_token }).exec();
   }
 }

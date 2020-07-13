@@ -7,9 +7,18 @@ import { SharedModule } from '../../shared/shared.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';
 
-import { EmailVerification, EmailVerificationSchema } from './schemas/email-verification.schema';
-import { ForgottenPassword, ForgottenPasswordSchema } from './schemas/forgotten-password.schema';
-import { ConsentRegistry, ConsentRegistrySchema } from './schemas/consent-registry.schema';
+import {
+  EmailVerification,
+  EmailVerificationSchema,
+} from './schemas/email-verification.schema';
+import {
+  ForgottenPassword,
+  ForgottenPasswordSchema,
+} from './schemas/forgotten-password.schema';
+import {
+  ConsentRegistry,
+  ConsentRegistrySchema,
+} from './schemas/consent-registry.schema';
 
 import { JwtStrategy } from './strategies/jwt.strategy';
 
@@ -28,5 +37,4 @@ const providers = [AuthService, JwtStrategy];
   controllers: [AuthController],
   providers: [...providers],
 })
-export class AuthModule {
-}
+export class AuthModule {}

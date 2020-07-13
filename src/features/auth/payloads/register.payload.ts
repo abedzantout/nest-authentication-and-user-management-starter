@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { UserRoles } from '../../../shared/users/models/user.model';
 
 export class RegisterPayload {
@@ -22,7 +28,6 @@ export class RegisterPayload {
   @IsOptional()
   role: UserRoles;
 }
-
 
 export class RegisterByInvitationParamPayload {
   @IsNotEmpty()

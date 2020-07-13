@@ -8,10 +8,12 @@ import { User } from '../../../shared/users/schemas/user.schema';
 import { LoginCredentials } from '../models/credentials.interface';
 import { AuthService } from '../services/auth.service';
 
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly configService: ConfigService, private readonly authService: AuthService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: true,
@@ -19,7 +21,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  public async validate(payload: any, request: LoginCredentials): Promise<User | HttpException> {
+  public async validate(
+    payload: any,
+    request: LoginCredentials,
+  ): Promise<User | HttpException> {
     const user = await this.authService.validateUser(request);
     return user || new UnauthorizedException();
   }

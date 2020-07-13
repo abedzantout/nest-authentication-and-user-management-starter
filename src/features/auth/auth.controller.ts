@@ -5,30 +5,41 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  Post, Query, UseInterceptors,
+  Post,
+  Query,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { LoginPayload } from './payloads/login.payload';
-import { RegisterByInvitationParamPayload, RegisterPayload } from './payloads/register.payload';
+import {
+  RegisterByInvitationParamPayload,
+  RegisterPayload,
+} from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
-import { EmailTokenVerificationPayload, EmailVerificationPayload } from './payloads/email-verification.payload';
+import {
+  EmailTokenVerificationPayload,
+  EmailVerificationPayload,
+} from './payloads/email-verification.payload';
 import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
 import { ResponseError, ResponseSuccess } from '../../core/response/response';
-import { ForgotPasswordParamPayload, ForgotPasswordPayload } from './payloads/forgot-password.payload';
+import {
+  ForgotPasswordParamPayload,
+  ForgotPasswordPayload,
+} from './payloads/forgot-password.payload';
 import { ResponseInterface } from '../../core/response/response.interface';
 
 @Controller('auth')
 @UseInterceptors(new MongoErrorHandlerInterceptor())
 export class AuthController {
-
-  constructor(private readonly authService: AuthService) {
-  }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async login(@Body() credentials: LoginPayload): Promise<ResponseInterface> {
+  public async login(
+    @Body() credentials: LoginPayload,
+  ): Promise<ResponseInterface> {
     try {
       const response = await this.authService.login(credentials);
       return new ResponseSuccess('LOGIN.SUCCESS', response);
@@ -40,10 +51,22 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async register(@Body() credentials: RegisterPayload): Promise<ResponseInterface> {
+  public async register(
+    @Body() credentials: RegisterPayload,
+  ): Promise<ResponseInterface> {
     try {
-      const response = await this.authService.register(credentials);
-      return new ResponseSuccess('REGISTER.SUCCESS', response);
+      const emailVerification = await this.authService.register(credentials);
+      const emailSent = await this.authService.sendEmailVerification(
+        emailVerification.email,
+        emailVerification.email_verification_token,
+      );
+      if (emailSent) {
+        return new ResponseSuccess(
+          'REGISTRATION.USER_REGISTERED_SUCCESSFULLY',
+          emailSent,
+        );
+      }
+      return new ResponseError('REGISTRATION.REGISTRATION.ERROR.MAIL_NOT_SENT');
     } catch (e) {
       return new ResponseError('REGISTER.ERROR', e.message);
     }
@@ -52,10 +75,15 @@ export class AuthController {
   @Post('register/:invitation_token')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async registerByInvitation(@Param() params: RegisterByInvitationParamPayload,
-                                    @Body() credentials: RegisterPayload): Promise<ResponseInterface> {
+  public async registerByInvitation(
+    @Param() params: RegisterByInvitationParamPayload,
+    @Body() credentials: RegisterPayload,
+  ): Promise<ResponseInterface> {
     try {
-      const response = await this.authService.registerByInvitation(params.invitation_token, credentials);
+      const response = await this.authService.registerByInvitation(
+        params.invitation_token,
+        credentials,
+      );
       return new ResponseSuccess('INVITATION.REGISTER_SUCCESS', response);
     } catch (e) {
       return new ResponseError('INVITATION.REGISTER_ERROR', e.message);
@@ -63,11 +91,18 @@ export class AuthController {
   }
 
   @Get('resend-verification/:email')
-  public async sendEmailVerification(@Param() params: EmailVerificationPayload): Promise<any> {
+  public async sendEmailVerification(
+    @Param() params: EmailVerificationPayload,
+  ): Promise<any> {
     try {
-      const { email_verification_token } = await this.authService.createEmailVerificationToken(params.email);
+      const {
+        email_verification_token,
+      } = await this.authService.createEmailVerificationToken(params.email);
 
-      const emailSent = await this.authService.sendEmailVerification(params.email, email_verification_token);
+      const emailSent = await this.authService.sendEmailVerification(
+        params.email,
+        email_verification_token,
+      );
 
       if (emailSent) {
         return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
@@ -79,7 +114,9 @@ export class AuthController {
   }
 
   @Get('verify')
-  public async verifyEmail(@Query() params: EmailTokenVerificationPayload): Promise<any> {
+  public async verifyEmail(
+    @Query() params: EmailTokenVerificationPayload,
+  ): Promise<any> {
     try {
       // todo: login user automatically
       return await this.authService.verifyEmail(params.token);
@@ -99,7 +136,9 @@ export class AuthController {
 
   @Get('reset-password/:token')
   @HttpCode(HttpStatus.OK)
-  public async getEmailForResetPassword(@Param() params: ForgotPasswordParamPayload) {
+  public async getEmailForResetPassword(
+    @Param() params: ForgotPasswordParamPayload,
+  ) {
     try {
       return this.authService.getEmailByForgotPasswordToken(params.token);
     } catch (e) {
@@ -109,10 +148,16 @@ export class AuthController {
 
   @Post('reset-password/:token')
   @HttpCode(HttpStatus.OK)
-  public async resetPassword(@Param() params: ForgotPasswordParamPayload, @Body() forgotPassword: ForgotPasswordPayload) {
+  public async resetPassword(
+    @Param() params: ForgotPasswordParamPayload,
+    @Body() forgotPassword: ForgotPasswordPayload,
+  ) {
     try {
-      const resetPassword = await this.authService.resetPassword(forgotPassword.email,
-        params.token, forgotPassword.new_password);
+      const resetPassword = await this.authService.resetPassword(
+        forgotPassword.email,
+        params.token,
+        forgotPassword.new_password,
+      );
       if (resetPassword) {
         return new ResponseSuccess('RESET_PASSWORD.SUCCESS');
       }

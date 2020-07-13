@@ -9,10 +9,11 @@ const providers = [InvitationService];
 @Module({
   imports: [
     CoreModule.forChild(),
-    MongooseModule.forFeature([{ name: Invitation.name, schema: InvitationSchema }])
+    MongooseModule.forFeature([
+      { name: Invitation.name, schema: InvitationSchema },
+    ]),
   ],
   providers: [...providers],
   exports: [...providers],
 })
-export class InvitationSharedModule {
-}
+export class InvitationSharedModule {}

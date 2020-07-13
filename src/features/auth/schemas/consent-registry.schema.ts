@@ -13,8 +13,13 @@ const schemaOptions: SchemaOptions = {
 
 @Schema(schemaOptions)
 export class ConsentRegistry extends Document {
-
-  @Prop({ required: true, type: String, trim: true, unique: true, lowercase: true })
+  @Prop({
+    required: true,
+    type: String,
+    trim: true,
+    unique: true,
+    lowercase: true,
+  })
   email: string;
 
   @Prop({ required: true, type: String })
@@ -33,4 +38,6 @@ export class ConsentRegistry extends Document {
   accepted_policy: boolean;
 }
 
-export const ConsentRegistrySchema = SchemaFactory.createForClass(ConsentRegistry);
+export const ConsentRegistrySchema = SchemaFactory.createForClass(
+  ConsentRegistry,
+);

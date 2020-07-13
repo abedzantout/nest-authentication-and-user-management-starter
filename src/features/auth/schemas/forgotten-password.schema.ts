@@ -13,8 +13,13 @@ const schemaOptions: SchemaOptions = {
 
 @Schema(schemaOptions)
 export class ForgottenPassword extends Document {
-
-  @Prop({ required: true, type: String, trim: true, unique: true, lowercase: true })
+  @Prop({
+    required: true,
+    type: String,
+    trim: true,
+    unique: true,
+    lowercase: true,
+  })
   email: string;
 
   @Prop({ required: true, type: String })
@@ -24,4 +29,6 @@ export class ForgottenPassword extends Document {
   timestamp: Date;
 }
 
-export const ForgottenPasswordSchema = SchemaFactory.createForClass(ForgottenPassword);
+export const ForgottenPasswordSchema = SchemaFactory.createForClass(
+  ForgottenPassword,
+);

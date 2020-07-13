@@ -8,12 +8,8 @@ import { CoreModule } from '../../core/core.module';
 const services = [];
 
 @Module({
-  imports: [
-    SharedModule,
-    CoreModule.forChild(),
-  ],
+  imports: [SharedModule, CoreModule.forChild()],
   controllers: [UsersController],
   providers: [...services],
 })
-export class UsersModule {
-}
+export class UsersModule {}

@@ -7,6 +7,6 @@ export class EmailTokenVerificationPayload {
 }
 
 export class EmailVerificationPayload {
-  @IsNotEmpty({message: 'Email is required'})
+  @IsNotEmpty({ message: 'Email is required' })
   email: string;
 }

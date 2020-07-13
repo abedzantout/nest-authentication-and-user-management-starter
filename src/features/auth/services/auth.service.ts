@@ -6,7 +6,10 @@ import { Model } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import * as nodemailer from 'nodemailer';
 
-import { LoginCredentials, RegisterCredentials } from '../models/credentials.interface';
+import {
+  LoginCredentials,
+  RegisterCredentials,
+} from '../models/credentials.interface';
 
 // schemas
 import { ConsentRegistry } from '../schemas/consent-registry.schema';
@@ -23,35 +26,36 @@ import { UsersService } from '../../../shared/users/services/users.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService,
-              private readonly jwtService: JwtService,
-              private readonly configService: ConfigService,
-              private readonly invitationService: InvitationService,
-              private readonly mailerService: MailerService,
-              @InjectModel(ConsentRegistry.name)
-              private readonly consentRegistryModel: Model<ConsentRegistry>,
-              @InjectModel(EmailVerification.name)
-              private readonly emailVerificationModel: Model<EmailVerification>,
-              @InjectModel(ForgottenPassword.name)
-              private readonly forgottenPasswordModel: Model<ForgottenPassword>,
-  ) {
-  }
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly invitationService: InvitationService,
+    private readonly mailerService: MailerService,
+    @InjectModel(ConsentRegistry.name)
+    private readonly consentRegistryModel: Model<ConsentRegistry>,
+    @InjectModel(EmailVerification.name)
+    private readonly emailVerificationModel: Model<EmailVerification>,
+    @InjectModel(ForgottenPassword.name)
+    private readonly forgottenPasswordModel: Model<ForgottenPassword>,
+  ) {}
 
-  public async register(userInformation: RegisterCredentials): Promise<User> {
+  public async register(
+    userInformation: RegisterCredentials,
+  ): Promise<EmailVerification> {
     const user = await this.usersService.addOne(userInformation);
-
     await this.saveUserConsent(user.email);
-
-    const createVerificationToken = await this.createEmailVerificationToken(user.email);
-
-    await this.sendEmailVerification(user.email, createVerificationToken.email_verification_token);
-
-    return user;
+    return await this.createEmailVerificationToken(user.email);
   }
 
-  public async registerByInvitation(invitation_token: string, userInfo: RegisterCredentials): Promise<User> {
-
-    const invitation = await this.invitationService.findOne(userInfo.email, invitation_token);
+  public async registerByInvitation(
+    invitation_token: string,
+    userInfo: RegisterCredentials,
+  ): Promise<User> {
+    const invitation = await this.invitationService.findOne(
+      userInfo.email,
+      invitation_token,
+    );
     const user = await this.usersService.findByEmail(userInfo.email);
 
     if (!invitation) throw Error('INVITATION.NOT_FOUND');
@@ -63,7 +67,6 @@ export class AuthService {
   }
 
   public async saveUserConsent(email: string): Promise<ConsentRegistry> {
-
     const userConsent = {
       email: email,
       privacy_policy: 'privacy policy',
@@ -75,25 +78,42 @@ export class AuthService {
     return await this.consentRegistryModel.create({ ...userConsent });
   }
 
-  public async createEmailVerificationToken(email: string): Promise<EmailVerification> {
-    const emailVerification = await this.emailVerificationModel.findOne({ email });
+  public async createEmailVerificationToken(
+    email: string,
+  ): Promise<EmailVerification> {
+    const emailVerification = await this.emailVerificationModel.findOne({
+      email,
+    });
 
-    if (emailVerification && ((new Date().getTime() - emailVerification.timestamp.getTime()) / 60000 < 15)) {
-      throw new HttpException('LOGIN.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+    if (
+      emailVerification &&
+      (new Date().getTime() - emailVerification.timestamp.getTime()) / 60000 <
+        15
+    ) {
+      throw new HttpException(
+        'LOGIN.EMAIL_SENT_RECENTLY',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
 
-    return await this.emailVerificationModel.findOneAndUpdate({ email }, {
-        email,
-        email_verification_token: uuidv4(),
-        timestamp: new Date(),
-      },
-      { upsert: true, new: true })
+    return await this.emailVerificationModel
+      .findOneAndUpdate(
+        { email },
+        {
+          email,
+          email_verification_token: uuidv4(),
+          timestamp: new Date(),
+        },
+        { upsert: true, new: true },
+      )
       .exec();
-
   }
 
   public async login(credentials: LoginCredentials): Promise<User | any> {
-    const user: User | any = await this.usersService.findUserAndPasswordById(credentials.email, credentials.password);
+    const user: User | any = await this.usersService.findUserAndPasswordById(
+      credentials.email,
+      credentials.password,
+    );
     if (!user) throw Error('LOGIN.USER_NOT_FOUND');
     if (!user.auth.email.valid) throw Error('LOGIN.EMAIL_NOT_VERIFIED');
     const access_token = await this.createToken(user.email, user.id);
@@ -101,10 +121,19 @@ export class AuthService {
   }
 
   public async createForgottenPasswordToken(email: string) {
-    const forgottenPassword = await this.forgottenPasswordModel.findOne({ email });
+    const forgottenPassword = await this.forgottenPasswordModel.findOne({
+      email,
+    });
 
-    if (forgottenPassword && ((new Date().getTime() - forgottenPassword.timestamp.getTime()) / 60000 < 15)) {
-      throw new HttpException('RESET_PASSWORD.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+    if (
+      forgottenPassword &&
+      (new Date().getTime() - forgottenPassword.timestamp.getTime()) / 60000 <
+        15
+    ) {
+      throw new HttpException(
+        'RESET_PASSWORD.EMAIL_SENT_RECENTLY',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
     const forgottenPasswordModel = await this.forgottenPasswordModel.findOneAndUpdate(
       { email: email },
@@ -119,13 +148,16 @@ export class AuthService {
     if (forgottenPasswordModel) {
       return forgottenPasswordModel;
     }
-    throw new HttpException('LOGIN.ERROR.GENERIC_ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
-
+    throw new HttpException(
+      'LOGIN.ERROR.GENERIC_ERROR',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 
   public async sendEmailForgotPassword(email) {
     const user = await this.usersService.findByEmail(email);
-    if (!user) throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    if (!user)
+      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
 
     const tokenModel = await this.createForgottenPasswordToken(email);
 
@@ -148,11 +180,12 @@ export class AuthService {
         to: email, // list of receivers (separated by ,)
         subject: 'Verify Email',
         text: 'Verify Email',
-        html: 'Hi! <br><br> Request Change Password<br><br>' +
+        html:
+          'Hi! <br><br> Request Change Password<br><br>' +
           `Here is your reset password link: ${link}`,
       };
 
-      const sent = await new Promise<boolean>(async function(resolve, reject) {
+      const sent = await new Promise<boolean>(async function (resolve, reject) {
         return await transporter.sendMail(mailOptions, async (error, info) => {
           if (error) {
             console.log('Message sent: %s', error);
@@ -164,14 +197,25 @@ export class AuthService {
       });
       return sent;
     }
-    throw new HttpException('REGISTER.USER_NOT_REGISTERED', HttpStatus.FORBIDDEN);
+    throw new HttpException(
+      'REGISTER.USER_NOT_REGISTERED',
+      HttpStatus.FORBIDDEN,
+    );
   }
 
   // TODO: remove email_token from here
-  public async sendEmailVerification(email: string, email_token: string): Promise<boolean> {
-    const emailVerificationModel = await this.emailVerificationModel.findOne({ email });
+  public async sendEmailVerification(
+    email: string,
+    email_token: string,
+  ): Promise<boolean> {
+    const emailVerificationModel = await this.emailVerificationModel.findOne({
+      email,
+    });
 
-    if (emailVerificationModel && emailVerificationModel.email_verification_token) {
+    if (
+      emailVerificationModel &&
+      emailVerificationModel.email_verification_token
+    ) {
       // const transporter = nodemailer.createTransport({
       //   service: 'gmail',
       //   host: 'smtp.gmail.com',
@@ -216,32 +260,45 @@ export class AuthService {
       };
       return this.mailerService.sendEmail(mail);
     } else {
-      throw new HttpException('REGISTER.USER_NOT_REGISTERED', HttpStatus.FORBIDDEN);
-
+      throw new HttpException(
+        'REGISTER.USER_NOT_REGISTERED',
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 
   public async verifyEmail(token: string): Promise<boolean> {
-    const emailVerification = await this.emailVerificationModel.findOne({ email_verification_token: token });
+    const emailVerification = await this.emailVerificationModel.findOne({
+      email_verification_token: token,
+    });
 
     if (emailVerification && emailVerification.email) {
-
-      return this.usersService.findByEmail(emailVerification.email).then(async user => {
-        user.auth.email.valid = true;
-        await this.usersService.updateOne(user);
-        await this.emailVerificationModel.deleteOne({ email: user.email });
-        return true;
-      });
+      return this.usersService
+        .findByEmail(emailVerification.email)
+        .then(async (user) => {
+          user.auth.email.valid = true;
+          await this.usersService.updateOne(user);
+          await this.emailVerificationModel.deleteOne({ email: user.email });
+          return true;
+        });
     }
     // todo: handle errors
   }
 
-  public async resetPassword(email: string, forgot_password_token: string, new_password: string): Promise<boolean> {
-
+  public async resetPassword(
+    email: string,
+    forgot_password_token: string,
+    new_password: string,
+  ): Promise<boolean> {
     try {
-      const forgotPasswordModel = await this.forgottenPasswordModel.findOne({ email });
+      const forgotPasswordModel = await this.forgottenPasswordModel.findOne({
+        email,
+      });
 
-      if (forgotPasswordModel && forgotPasswordModel.new_password_token === forgot_password_token) {
+      if (
+        forgotPasswordModel &&
+        forgotPasswordModel.new_password_token === forgot_password_token
+      ) {
         await this.usersService.updateOnePassword(email, new_password);
         await this.forgottenPasswordModel.deleteOne({ email });
         return true;
@@ -250,17 +307,23 @@ export class AuthService {
     } catch (e) {
       throw Error(e);
     }
-
   }
 
-  public async getEmailByForgotPasswordToken(new_password_token: string): Promise<ForgottenPassword> {
-    return await this.forgottenPasswordModel.findOne({ new_password_token }).exec();
+  public async getEmailByForgotPasswordToken(
+    new_password_token: string,
+  ): Promise<ForgottenPassword> {
+    return await this.forgottenPasswordModel
+      .findOne({ new_password_token })
+      .exec();
   }
 
-  public async getEmailByInvitationToken(invitation_token: string): Promise<Invitation> {
-    return await this.invitationService.findOneByInvitationToken(invitation_token);
+  public async getEmailByInvitationToken(
+    invitation_token: string,
+  ): Promise<Invitation> {
+    return await this.invitationService.findOneByInvitationToken(
+      invitation_token,
+    );
   }
-
 
   private async createToken(email: string, id: string) {
     const payload = { email, sub: id };

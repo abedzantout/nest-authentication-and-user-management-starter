@@ -10,10 +10,10 @@ import { UserInterface } from '../models/user.model';
 
 @Injectable()
 export class UsersService {
-
-  constructor(@InjectModel(User.name)
-              private readonly userModel: Model<User>) {
-  }
+  constructor(
+    @InjectModel(User.name)
+    private readonly userModel: Model<User>,
+  ) {}
 
   public async getAll(): Promise<User[]> {
     return await this.userModel.find().exec();
@@ -33,29 +33,38 @@ export class UsersService {
   }
 
   public async updateOne(user: UserInterface): Promise<any> {
-    return await this.userModel.findOneAndUpdate({ _id: user.id }, user, { new: true }).exec();
+    return await this.userModel
+      .findOneAndUpdate({ _id: user.id }, user, { new: true })
+      .exec();
   }
 
-  public async updateOnePassword(email: string, new_password: string): Promise<User> {
+  public async updateOnePassword(
+    email: string,
+    new_password: string,
+  ): Promise<User> {
     const hashedPassword = await bcrypt.hash(new_password, 10);
-    return await this.userModel.findOneAndUpdate({ email },
-      { password: hashedPassword }, { new: true }).exec();
+    return await this.userModel
+      .findOneAndUpdate({ email }, { password: hashedPassword }, { new: true })
+      .exec();
   }
 
   public async findByIdAndDelete(id: string): Promise<any> {
     return await this.userModel.findByIdAndDelete(id).exec();
   }
 
-  public async findUserAndPasswordById(email: string, password: string): Promise<User | Error> {
+  public async findUserAndPasswordById(
+    email: string,
+    password: string,
+  ): Promise<User | Error> {
     const user = await this.userModel.findOne({ email });
-    const checkPassword = user ? (await bcrypt.compare(password, user.password)) : null;
+    const checkPassword = user
+      ? await bcrypt.compare(password, user.password)
+      : null;
 
     if (checkPassword) {
       return user;
     }
 
     throw Error('LOGIN.ERROR');
-
   }
-
 }

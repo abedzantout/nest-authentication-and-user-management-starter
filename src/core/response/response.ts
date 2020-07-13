@@ -11,9 +11,13 @@ export class ResponseError implements ResponseInterface {
     this.success = false;
     this.message = infoMessage;
     this.data = data;
-    console.warn(new Date().toString() + ' - [Response]: ' + infoMessage + (data ? ' - ' + JSON.stringify(data) : ''));
-  };
-
+    console.warn(
+      new Date().toString() +
+        ' - [Response]: ' +
+        infoMessage +
+        (data ? ' - ' + JSON.stringify(data) : ''),
+    );
+  }
 }
 
 export class ResponseSuccess implements ResponseInterface {
@@ -30,12 +34,14 @@ export class ResponseSuccess implements ResponseInterface {
     if (!notLog) {
       try {
         const offuscateRequest = JSON.parse(JSON.stringify(data));
-        if (offuscateRequest && offuscateRequest.token) offuscateRequest.token = '*******';
-        console.log(new Date().toString() + ' - [Response]: ' + JSON.stringify(offuscateRequest));
-      } catch (error) {
-      }
+        if (offuscateRequest && offuscateRequest.token)
+          offuscateRequest.token = '*******';
+        console.log(
+          new Date().toString() +
+            ' - [Response]: ' +
+            JSON.stringify(offuscateRequest),
+        );
+      } catch (error) {}
     }
-
-  };
-
+  }
 }

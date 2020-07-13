@@ -37,7 +37,14 @@ export class MailerService {
     return this.host + link;
   }
 
-  private constructMailOptions({ email, subject, text, html, linkText, link }: MailerOptions) {
+  private constructMailOptions({
+    email,
+    subject,
+    text,
+    html,
+    linkText,
+    link,
+  }: MailerOptions) {
     return {
       from: this.host,
       to: email, // list of receivers (separated by ,)
@@ -52,7 +59,8 @@ export class MailerService {
 
   public async sendEmail(mailOptions: MailerOptions): Promise<boolean> {
     return await new Promise<boolean>(async (resolve, reject) => {
-      return this.transporter.sendMail(mailOptions,
+      return this.transporter.sendMail(
+        this.constructMailOptions(mailOptions),
         async (error, info) => {
           if (error) {
             console.log('Message sent: %s', error);
@@ -60,8 +68,8 @@ export class MailerService {
           }
           console.log('Message sent: %s', info.messageId);
           resolve(true);
-        });
+        },
+      );
     });
-
   }
 }

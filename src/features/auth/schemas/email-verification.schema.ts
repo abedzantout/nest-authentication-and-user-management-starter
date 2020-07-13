@@ -13,8 +13,13 @@ const schemaOptions: SchemaOptions = {
 
 @Schema(schemaOptions)
 export class EmailVerification extends Document {
-
-  @Prop({ required: true, type: String, trim: true, unique: true, lowercase: true })
+  @Prop({
+    required: true,
+    type: String,
+    trim: true,
+    unique: true,
+    lowercase: true,
+  })
   email: string;
 
   @Prop({ required: true, type: String })
@@ -24,4 +29,6 @@ export class EmailVerification extends Document {
   timestamp: Date;
 }
 
-export const EmailVerificationSchema = SchemaFactory.createForClass(EmailVerification);
+export const EmailVerificationSchema = SchemaFactory.createForClass(
+  EmailVerification,
+);

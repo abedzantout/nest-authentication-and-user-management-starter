@@ -11,5 +11,4 @@ const sharedModules = [SharedUsersModule, InvitationSharedModule];
   exports: [...sharedModules],
   providers: [],
 })
-export class SharedModule {
-}
+export class SharedModule {}

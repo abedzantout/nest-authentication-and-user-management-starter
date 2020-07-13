@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UsersService } from '../../shared/users/services/users.service';
 import { UserUpdatePayload } from './payloads/user-update.payload';
 import { UserDeletePayload } from './payloads/user-delete.payload';
@@ -7,10 +17,10 @@ import { InvitationService } from '../../shared/invitation/services/invitation.s
 
 @Controller('users')
 export class UsersController {
-
-  constructor(private readonly usersService: UsersService,
-              private readonly invitationService: InvitationService) {
-  }
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly invitationService: InvitationService,
+  ) {}
 
   @Post()
   @UsePipes(new ValidationPipe())
@@ -26,19 +36,14 @@ export class UsersController {
   async getUsers() {
     try {
       return await this.usersService.getAll();
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     try {
       return await this.usersService.getById(id);
-    } catch (e) {
-
-
-    }
+    } catch (e) {}
   }
 
   @Patch()
@@ -46,9 +51,7 @@ export class UsersController {
   async updateUser(@Body() updatedUser: UserUpdatePayload) {
     try {
       return await this.usersService.updateOne(updatedUser);
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 
   @Delete(':id')

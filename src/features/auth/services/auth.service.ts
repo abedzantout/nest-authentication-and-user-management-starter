@@ -8,17 +8,18 @@ import * as nodemailer from 'nodemailer';
 
 import { LoginCredentials, RegisterCredentials } from '../models/credentials.interface';
 
-import { User } from '../../../shared/users/schemas/user.schema';
-import { UsersService } from '../../../shared/users/services/users.service';
-
 // schemas
 import { ConsentRegistry } from '../schemas/consent-registry.schema';
 import { EmailVerification } from '../schemas/email-verification.schema';
 import { ForgottenPassword } from '../schemas/forgotten-password.schema';
+import { Invitation } from '../../../shared/invitation/schemas/invitation.schema';
+import { User } from '../../../shared/users/schemas/user.schema';
+
+// services
 import { ConfigService } from '../../../core/config/config.service';
 import { InvitationService } from '../../../shared/invitation/services/invitation.service';
-import { Invitation } from '../../../shared/invitation/schemas/invitation.schema';
-
+import { MailerService } from '../../../core/mailer/mailer.service';
+import { UsersService } from '../../../shared/users/services/users.service';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +27,7 @@ export class AuthService {
               private readonly jwtService: JwtService,
               private readonly configService: ConfigService,
               private readonly invitationService: InvitationService,
+              private readonly mailerService: MailerService,
               @InjectModel(ConsentRegistry.name)
               private readonly consentRegistryModel: Model<ConsentRegistry>,
               @InjectModel(EmailVerification.name)
@@ -77,7 +79,7 @@ export class AuthService {
     const emailVerification = await this.emailVerificationModel.findOne({ email });
 
     if (emailVerification && ((new Date().getTime() - emailVerification.timestamp.getTime()) / 60000 < 15)) {
-      throw new HttpException('LOGIN.EMAIL_SENDED_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException('LOGIN.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return await this.emailVerificationModel.findOneAndUpdate({ email }, {
@@ -102,7 +104,7 @@ export class AuthService {
     const forgottenPassword = await this.forgottenPasswordModel.findOne({ email });
 
     if (forgottenPassword && ((new Date().getTime() - forgottenPassword.timestamp.getTime()) / 60000 < 15)) {
-      throw new HttpException('RESET_PASSWORD.EMAIL_SENDED_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException('RESET_PASSWORD.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     const forgottenPasswordModel = await this.forgottenPasswordModel.findOneAndUpdate(
       { email: email },
@@ -170,40 +172,49 @@ export class AuthService {
     const emailVerificationModel = await this.emailVerificationModel.findOne({ email });
 
     if (emailVerificationModel && emailVerificationModel.email_verification_token) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        auth: {
-          user: this.configService.nodemailerConfig.nodemailer_email,
-          pass: this.configService.nodemailerConfig.nodemailer_password,
-        },
-      });
-
-      const link = `${this.configService.host}auth/verify?token=${email_token}`;
-      const mailOptions = {
-        from: this.configService.nodemailerConfig.nodemailer_email,
-        to: email, // list of receivers (separated by ,)
-        subject: 'Verify Email',
-        text: 'Verify Email',
-        html: 'Hi! <br><br> Thanks for your registration<br><br>' +
-          `Here is your email verification link: ${link}`,
+      // const transporter = nodemailer.createTransport({
+      //   service: 'gmail',
+      //   host: 'smtp.gmail.com',
+      //   port: 587,
+      //   secure: false,
+      //   requireTLS: true,
+      //   auth: {
+      //     user: this.configService.nodemailerConfig.nodemailer_email,
+      //     pass: this.configService.nodemailerConfig.nodemailer_password,
+      //   },
+      // });
+      //
+      // const link = `${this.configService.host}auth/verify?token=${email_token}`;
+      // const mailOptions = {
+      //   from: this.configService.nodemailerConfig.nodemailer_email,
+      //   to: email, // list of receivers (separated by ,)
+      //   subject: 'Verify Email',
+      //   text: 'Verify Email',
+      //   html: 'Hi! <br><br> Thanks for your registration<br><br>' +
+      //     `Here is your email verification link: ${link}`,
+      // };
+      //
+      // const sent = await new Promise<boolean>(async function(resolve, reject) {
+      //   return await transporter.sendMail(mailOptions, async (error, info) => {
+      //     if (error) {
+      //       console.log('Message sent: %s', error);
+      //       return reject(false);
+      //     }
+      //     console.log('Message sent: %s', info.messageId);
+      //     resolve(true);
+      //   });
+      // });
+      //
+      // return sent;
+      const mail = {
+        email,
+        text: 'Here is your email verification link',
+        html: 'Hi! <br><br> Thanks for your registration<br><br>',
+        link: `/auth/verify?token=${email_token}`,
+        linkText: 'Here is your email verification link',
+        subject: 'Verify your email',
       };
-
-      const sent = await new Promise<boolean>(async function(resolve, reject) {
-        return await transporter.sendMail(mailOptions, async (error, info) => {
-          if (error) {
-            console.log('Message sent: %s', error);
-            return reject(false);
-          }
-          console.log('Message sent: %s', info.messageId);
-          resolve(true);
-        });
-      });
-
-      return sent;
+      return this.mailerService.sendEmail(mail);
     } else {
       throw new HttpException('REGISTER.USER_NOT_REGISTERED', HttpStatus.FORBIDDEN);
 

@@ -50,7 +50,7 @@ export class MailerService {
     };
   }
 
-  public async sendEmail(mailOptions) {
+  public async sendEmail(mailOptions: MailerOptions): Promise<boolean> {
     return await new Promise<boolean>(async (resolve, reject) => {
       return this.transporter.sendMail(mailOptions,
         async (error, info) => {

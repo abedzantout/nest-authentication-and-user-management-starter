@@ -5,7 +5,9 @@ import { SharedModule } from '../../shared/shared.module';
 import { UsersController } from './users.controller';
 import { CoreModule } from '../../core/core.module';
 
-const services = [];
+import { InvitationRequestService } from './services/invitation-request.service';
+
+const services = [InvitationRequestService];
 
 @Module({
   imports: [SharedModule, CoreModule.forChild()],

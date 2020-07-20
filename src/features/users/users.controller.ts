@@ -13,21 +13,21 @@ import { UsersService } from '../../shared/users/services/users.service';
 import { UserUpdatePayload } from './payloads/user-update.payload';
 import { UserDeletePayload } from './payloads/user-delete.payload';
 import { InvitationPayload } from './payloads/invitation.payload';
-import { InvitationService } from '../../shared/invitation/services/invitation.service';
 import { ResponseError, ResponseSuccess } from '../../core/response/response';
+import { InvitationRequestService } from './services/invitation-request.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly invitationService: InvitationService,
+    private readonly invitationService: InvitationRequestService,
   ) {}
 
   @Post()
   @UsePipes(new ValidationPipe())
   async addUser(@Body() createInvitation: InvitationPayload): Promise<any> {
     try {
-      const invitationEmailSent = await this.invitationService.inviteUser(
+      const invitationEmailSent = await this.invitationService.invite(
         createInvitation.email,
       );
       if (invitationEmailSent) {
@@ -35,7 +35,7 @@ export class UsersController {
       }
       return new ResponseError('USERS.ERROR_INVITING_USER');
     } catch (e) {
-      return new ResponseError('USERS.ERROR_ADDING_USER', e);
+      return new ResponseError(e.message);
     }
   }
 

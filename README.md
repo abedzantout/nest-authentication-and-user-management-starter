@@ -1,16 +1,16 @@
 <p align="left">
   <a href="https://techhive.io/" target="blank"><img src="https://www.techhive.io/static/brand/logo-masterclass.svg" width="250" alt="Nest Logo" /></a>
 </p>
-  
 
-# Nest Authentication and User Management Starter 
+
+# Nest Authentication and User Management Starter
 
 by [@techhive.IO](https://www.techhive.io/)
 
 ## Description
 
-[Nest Js Authentication and User Management Starter](https://github.com/techhiveIO/nest-authentication-and-user-management-starter) 
-is a starter pack for seamlessly kick-starting your API development with the industry's 
+[Nest Js Authentication and User Management Starter](https://github.com/techhiveIO/nest-authentication-and-user-management-starter)
+is a starter pack for seamlessly kick-starting your API development with the industry's
 and TechHive.IO's best practices and recommendations.
 
 ## Table of Content
@@ -28,13 +28,12 @@ and TechHive.IO's best practices and recommendations.
 ## Getting Started
 
 ```bash
-git clone https://github.com/techhiveIO/Nest-Boilerplate 
+git clone https://github.com/techhiveIO/nest-authentication-and-user-management-starter
 cd my-project
 rm -r .git
 cp .env.example .env
 npm run dev
 ```
-
 
 Make sure you enter the correct values in your `.env` file:
 
@@ -73,22 +72,50 @@ $ npm run test:cov
 
 ## Useful Commands
 
+- `start:dev` - start application in development mode
+- `start:debug` - start application in development and debug mode
+- `format` - runs prettier to format whole code base (`.ts` and `.css`)
+- `lint` - lints project using eslint,
+- `start` - Run Nest application
+- `build` - Build application
+- `start:prod` - Start application in production
+
 ## Goals
+
+Developers often want a good starting point when implementing a new API.
+Common tasks such as authentication and user management are re-implemented on a regualar
+basis.
+With this starter kit, the developer directly bootstrap the development of their new API,
+or use it as a inspiration to build any powerful API server using Nest Js.
 
 ## Features
 
+- Powerful Nest API out of the box
+- Built-in powerful authentication and user management APIs
+- User invitation
+- JWT integration
+- MongoDB and Mongoose Integration
+- Optimized for speed and scalability
+- Postman file included
+
 ## Stack
+
+- [Nest Js 7+](https://www.nestjs.com)
+- Typescript
+- Node JS
+- MongoDB and [Mongoose](https://mongoosejs.com/)
+- [Nodemailer](https://nodemailer.com/about/)
 
 ## Learning Materials
 
 ## Bugs
 
 Please make sure you fill in the appropriate fields when submitting an issue. Our team will
-try to resolve it as soon as possible
+try to resolve it as soon as possible.
 
 ## Contributors
 
-Want to start contributing to open source with the Nest Authentication and User Management Starter  ?
+Want to start contributing to open source with the Nest Authentication and User Management Starter ?
 
 Leave your mark and join the growing team of contributors!
 
@@ -111,7 +138,7 @@ and reading [Contributor Guide](https://github.com/techhiveIO/nest-authenticatio
 
 ## License
 
-Nest Js Authentication and User Management Starter Kit  is © 2020 TechHive.IO LLC . It is distributed under the [Creative Commons
+Nest Js Authentication and User Management Starter Kit is © 2020 TechHive.IO LLC . It is distributed under the [Creative Commons
 Attribution License](http://creativecommons.org/licenses/by/4.0/).
 
 The names and logos for TechHive.IO LLC are trademarks of TechHive.IO LLC.

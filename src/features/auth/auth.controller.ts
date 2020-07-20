@@ -126,11 +126,18 @@ export class AuthController {
   }
 
   @Get('forgot-password/:email')
-  async sendEmailForgotPassword(@Param() params: any) {
+  async sendEmailForgotPassword(@Param() params: any): Promise<any> {
     try {
-      return await this.authService.sendEmailForgotPassword(params.email);
+      const emailForgotPasswordSent: boolean = await this.authService.sendEmailForgotPassword(
+        params.email,
+      );
+
+      return new ResponseSuccess(
+        'RESET_PASSWORD.EMAIL_SENT',
+        emailForgotPasswordSent,
+      );
     } catch (e) {
-      console.error(e);
+      return new ResponseError(e.message);
     }
   }
 

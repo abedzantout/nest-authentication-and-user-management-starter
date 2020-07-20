@@ -1,62 +1,176 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { LoginPayload } from './payloads/login.payload';
-import { RegisterPayload } from './payloads/register.payload';
+import {
+  RegisterByInvitationParamPayload,
+  RegisterPayload,
+} from './payloads/register.payload';
 import { AuthService } from './services/auth.service';
-import { EmailVerificationPayload } from './payloads/email-verification.payload';
+import {
+  EmailTokenVerificationPayload,
+  EmailVerificationPayload,
+} from './payloads/email-verification.payload';
+import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
+import { ResponseError, ResponseSuccess } from '../../core/response/response';
+import {
+  ForgotPasswordParamPayload,
+  ForgotPasswordPayload,
+} from './payloads/forgot-password.payload';
+import { ResponseInterface } from '../../core/response/response.interface';
 
 @Controller('auth')
+@UseInterceptors(new MongoErrorHandlerInterceptor())
 export class AuthController {
-
-  constructor(private readonly authService: AuthService) {
-  }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async login(@Body() credentials: LoginPayload) {
+  public async login(
+    @Body() credentials: LoginPayload,
+  ): Promise<ResponseInterface> {
     try {
-      return await this.authService.login(credentials);
+      const response = await this.authService.login(credentials);
+      return new ResponseSuccess('LOGIN.SUCCESS', response);
     } catch (e) {
-      console.log(e);
+      return new ResponseError('LOGIN.ERROR', e.message);
     }
   }
 
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
-  public async register(@Body() credentials: RegisterPayload) {
+  public async register(
+    @Body() credentials: RegisterPayload,
+  ): Promise<ResponseInterface> {
     try {
-      return await this.authService.register(credentials);
+      const emailVerification = await this.authService.register(credentials);
+      const emailSent = await this.authService.sendEmailVerification(
+        emailVerification.email,
+        emailVerification.email_verification_token,
+      );
+      if (emailSent) {
+        return new ResponseSuccess(
+          'REGISTRATION.USER_REGISTERED_SUCCESSFULLY',
+          emailSent,
+        );
+      }
+      return new ResponseError('REGISTRATION.REGISTRATION.ERROR.MAIL_NOT_SENT');
     } catch (e) {
-      // todo: handle exception
+      return new ResponseError('REGISTER.ERROR', e.message);
     }
   }
 
-  @Get('email/resend-verification/:email')
-  public async sendEmailVerification(@Param() params: EmailVerificationPayload): Promise<any> {
+  @Post('register/:invitation_token')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe())
+  public async registerByInvitation(
+    @Param() params: RegisterByInvitationParamPayload,
+    @Body() credentials: RegisterPayload,
+  ): Promise<ResponseInterface> {
     try {
-      return await this.authService.sendEmailVerification(params.email);
+      const response = await this.authService.registerByInvitation(
+        params.invitation_token,
+        credentials,
+      );
+      return new ResponseSuccess('INVITATION.REGISTER_SUCCESS', response);
     } catch (e) {
+      return new ResponseError('INVITATION.REGISTER_ERROR', e.message);
+    }
+  }
 
+  @Get('resend-verification/:email')
+  public async sendEmailVerification(
+    @Param() params: EmailVerificationPayload,
+  ): Promise<any> {
+    try {
+      const {
+        email_verification_token,
+      } = await this.authService.createEmailVerificationToken(params.email);
+
+      const emailSent = await this.authService.sendEmailVerification(
+        params.email,
+        email_verification_token,
+      );
+
+      if (emailSent) {
+        return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
+      }
+      return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+    } catch (error) {
+      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
+    }
+  }
+
+  @Get('verify')
+  public async verifyEmail(
+    @Query() params: EmailTokenVerificationPayload,
+  ): Promise<any> {
+    try {
+      // todo: login user automatically
+      return await this.authService.verifyEmail(params.token);
+    } catch (e) {
+      console.log(e);
     }
   }
 
   @Get('forgot-password/:email')
-  async sendEmailForgotPassword(@Param() params: EmailVerificationPayload) {
+  async sendEmailForgotPassword(@Param() params: any): Promise<any> {
     try {
-      return await this.authService.sendEmailForgotPassword(params.email);
-    } catch (e) {
+      const emailForgotPasswordSent: boolean = await this.authService.sendEmailForgotPassword(
+        params.email,
+      );
 
+      return new ResponseSuccess(
+        'RESET_PASSWORD.EMAIL_SENT',
+        emailForgotPasswordSent,
+      );
+    } catch (e) {
+      return new ResponseError(e.message);
     }
   }
 
-  @Post('email/reset-password')
+  @Get('reset-password/:token')
   @HttpCode(HttpStatus.OK)
-  public async resetPassword(@Param() params: EmailVerificationPayload) {
+  public async getEmailForResetPassword(
+    @Param() params: ForgotPasswordParamPayload,
+  ) {
     try {
-      return await this.authService.resetPassword(params.email);
+      return this.authService.getEmailByForgotPasswordToken(params.token);
     } catch (e) {
+      return e;
+    }
+  }
 
+  @Post('reset-password/:token')
+  @HttpCode(HttpStatus.OK)
+  public async resetPassword(
+    @Param() params: ForgotPasswordParamPayload,
+    @Body() forgotPassword: ForgotPasswordPayload,
+  ) {
+    try {
+      const resetPassword = await this.authService.resetPassword(
+        forgotPassword.email,
+        params.token,
+        forgotPassword.new_password,
+      );
+      if (resetPassword) {
+        return new ResponseSuccess('RESET_PASSWORD.SUCCESS');
+      }
+      return new ResponseError('RESET_PASSWORD.CHANGE_PASSWORD_ERROR');
+    } catch (e) {
+      return e;
     }
   }
 }

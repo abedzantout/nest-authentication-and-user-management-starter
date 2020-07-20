@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { UserRoles } from '../../../shared/users/models/user.model';
 
 export class UserPayload {
   @IsNotEmpty()
@@ -16,4 +17,8 @@ export class UserPayload {
   @IsNotEmpty()
   @IsString()
   password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  role: UserRoles;
 }

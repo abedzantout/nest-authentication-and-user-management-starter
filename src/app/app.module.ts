@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 
 import { FeaturesModule } from '../features/features.module';
 import { SharedModule } from '../shared/shared.module';
-
+import { CoreModule } from '../core/core.module';
 
 const mongooseOptions: MongooseModuleOptions = {
   useUnifiedTopology: true,
@@ -20,12 +20,15 @@ const mongooseOptions: MongooseModuleOptions = {
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGODB_CONNECTION_STRING, mongooseOptions),
+    CoreModule.forRoot(),
+    MongooseModule.forRoot(
+      process.env.MONGODB_CONNECTION_STRING,
+      mongooseOptions,
+    ),
     SharedModule,
     FeaturesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule {}

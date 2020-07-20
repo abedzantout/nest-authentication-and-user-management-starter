@@ -1,16 +1,34 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { SchemaOptions } from '@nestjs/mongoose/dist/decorators/schema.decorator';
 
-@Schema()
-export class ForgottenPassword {
+// todo: unify
+const schemaOptions: SchemaOptions = {
+  collection: 'forgotten-passwords',
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+  },
+};
 
-  @Prop({ required: true, type: String, trim: true, unique: true, lowercase: true })
+@Schema(schemaOptions)
+export class ForgottenPassword extends Document {
+  @Prop({
+    required: true,
+    type: String,
+    trim: true,
+    unique: true,
+    lowercase: true,
+  })
   email: string;
 
   @Prop({ required: true, type: String })
   new_password_token: string;
 
   @Prop({ required: true, type: Date })
-  timestamp: string;
+  timestamp: Date;
 }
 
-export const ForgottenPasswordSchema = SchemaFactory.createForClass(ForgottenPassword);
+export const ForgottenPasswordSchema = SchemaFactory.createForClass(
+  ForgottenPassword,
+);

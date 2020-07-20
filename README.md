@@ -1,37 +1,47 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+<p align="left">
+  <a href="https://techhive.io/" target="blank"><img src="https://www.techhive.io/static/brand/logo-masterclass.svg" width="250" alt="Nest Logo" /></a>
 </p>
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+
+# Nest Authentication and User Management Starter
+
+by [@techhive.IO](https://www.techhive.io/)
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest Js Authentication and User Management Starter](https://github.com/techhiveIO/nest-authentication-and-user-management-starter)
+is a starter pack for seamlessly kick-starting your API development with the industry's
+and TechHive.IO's best practices and recommendations.
 
-## Installation
+## Table of Content
+
+- [Live Demo](https://techhive.io)
+- [Getting Started](#setting-started)
+- [Useful Commands](#useful-commands)
+- [Goals](#goals)
+- [Features](#features)
+- [Learning Materials](#learning-materials)
+- [Bugs](#bugs)
+- [Contributors](#contributors)
+- [License](#license)
+
+## Getting Started
 
 ```bash
-$ npm install
+git clone https://github.com/techhiveIO/nest-authentication-and-user-management-starter
+cd my-project
+rm -r .git
+cp .env.example .env
+npm run dev
+```
+
+Make sure you enter the correct values in your `.env` file:
+
+```
+MONGODB_CONNECTION_STRING=<your mongodb string>
+NODEMAILER_EMAIL=<your modemailer email>
+NODEMAILER_PASSWORD=<your modemailer password>
+HOST=<your host >
 ```
 
 ## Running the app
@@ -60,19 +70,75 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Useful Commands
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `start:dev` - start application in development mode
+- `start:debug` - start application in development and debug mode
+- `format` - runs prettier to format whole code base (`.ts` and `.css`)
+- `lint` - lints project using eslint,
+- `start` - Run Nest application
+- `build` - Build application
+- `start:prod` - Start application in production
 
-## Stay in touch
+## Goals
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Developers often want a good starting point when implementing a new API.
+Common tasks such as authentication and user management are re-implemented on a regualar
+basis.
+With this starter kit, the developer directly bootstrap the development of their new API,
+or use it as a inspiration to build any powerful API server using Nest Js.
+
+## Features
+
+- Powerful Nest API out of the box
+- Built-in powerful authentication and user management APIs
+- User invitation
+- JWT integration
+- MongoDB and Mongoose Integration
+- Optimized for speed and scalability
+- Postman file included
+
+## Stack
+
+- [Nest Js 7+](https://www.nestjs.com)
+- Typescript
+- Node JS
+- MongoDB and [Mongoose](https://mongoosejs.com/)
+- [Nodemailer](https://nodemailer.com/about/)
+
+## Learning Materials
+
+## Bugs
+
+Please make sure you fill in the appropriate fields when submitting an issue. Our team will
+try to resolve it as soon as possible.
+
+## Contributors
+
+Want to start contributing to open source with the Nest Authentication and User Management Starter ?
+
+Leave your mark and join the growing team of contributors!
+
+Get started by checking out list of [open issues](https://github.com/techhiveIO/nest-authentication-and-user-management-starter/issues)
+and reading [Contributor Guide](https://github.com/techhiveIO/nest-authentication-and-user-management-starter/blob/master/CONTRIBUTING.md)
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/abedzantout"><img src="https://avatars3.githubusercontent.com/u/4046627?v=4" width="100px;" alt="Abdul Rahman Zantout"/><br /><sub><b>Abdul Rahman Zantout</b></sub></a><br /><a href="https://github.com/tomastrajan/angular-ngrx-material-starter/commits?author=abedzantout" title="Code">💻</a> <a href="https://github.com/tomastrajan/angular-ngrx-material-starter/commits?author=abedzantout" title="Documentation">📖</a> <a href="https://github.com/tomastrajan/angular-ngrx-material-starter/commits?author=abedzantout" title="Tests">⚠️</a> <a href="#design-abedzantout" title="Design">🎨</a> <a href="#blog-abedzantout" title="Blogposts">📝</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
 
-Nest Boilerplate is © 2020 TechHive.IO LLC . It is distributed under the [Creative Commons
+Nest Js Authentication and User Management Starter Kit is © 2020 TechHive.IO LLC . It is distributed under the [Creative Commons
 Attribution License](http://creativecommons.org/licenses/by/4.0/).
 
 The names and logos for TechHive.IO LLC are trademarks of TechHive.IO LLC.

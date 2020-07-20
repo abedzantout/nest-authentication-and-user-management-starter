@@ -15,12 +15,14 @@ import { UserDeletePayload } from './payloads/user-delete.payload';
 import { InvitationPayload } from './payloads/invitation.payload';
 import { ResponseError, ResponseSuccess } from '../../core/response/response';
 import { InvitationRequestService } from './services/invitation-request.service';
+import { ConsentRegistryService } from '../../shared/auth/services/consent-registry.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly invitationService: InvitationRequestService,
+    private readonly consentRegistryService: ConsentRegistryService,
   ) {}
 
   @Post()
@@ -55,20 +57,24 @@ export class UsersController {
 
   @Patch()
   @UsePipes(new ValidationPipe())
-  async updateUser(@Body() updatedUser: UserUpdatePayload) {
+  async updateUser(@Body() userToUpdate: UserUpdatePayload) {
     try {
-      return await this.usersService.updateOne(updatedUser);
-    } catch (e) {}
+      const updatedUser = await this.usersService.updateOne(userToUpdate);
+      return new ResponseSuccess('USERS.SUCCESSFULLY_UPDATED', updatedUser);
+    } catch (e) {
+      return new ResponseSuccess('USERS.ERROR_UPDATING_USER', e);
+    }
   }
 
   @Delete(':id')
   @UsePipes(new ValidationPipe())
   async deleteUser(@Param() userToDelete: UserDeletePayload) {
     try {
-      await this.usersService.findByIdAndDelete(userToDelete.id);
-      return { success: true };
+      const user = await this.usersService.findByIdAndDelete(userToDelete.id);
+      await this.consentRegistryService.deleteConsent(user.email);
+      return new ResponseSuccess('USERS.SUCCESSFULLY_DELETED');
     } catch (e) {
-      console.log(e);
+      return new ResponseSuccess('USERS.ERROR_DELETING_USER', e);
     }
   }
 }

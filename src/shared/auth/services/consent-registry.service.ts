@@ -9,6 +9,7 @@ export class ConsentRegistryService {
     @InjectModel(ConsentRegistry.name)
     private readonly consentRegistryModel: Model<ConsentRegistry>,
   ) {}
+
   public async saveUserConsent(email: string): Promise<ConsentRegistry> {
     const userConsent = {
       email: email,
@@ -19,5 +20,9 @@ export class ConsentRegistryService {
       date: new Date(),
     };
     return await this.consentRegistryModel.create({ ...userConsent });
+  }
+
+  public async deleteConsent(email: string): Promise<any> {
+    return await this.consentRegistryModel.findOneAndDelete({ email }).exec();
   }
 }

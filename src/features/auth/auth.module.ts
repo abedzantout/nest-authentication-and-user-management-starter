@@ -15,10 +15,6 @@ import {
   ForgottenPassword,
   ForgottenPasswordSchema,
 } from './schemas/forgotten-password.schema';
-import {
-  ConsentRegistry,
-  ConsentRegistrySchema,
-} from './schemas/consent-registry.schema';
 
 import { JwtStrategy } from './strategies/jwt.strategy';
 
@@ -31,7 +27,6 @@ const providers = [AuthService, JwtStrategy];
     MongooseModule.forFeature([
       { name: EmailVerification.name, schema: EmailVerificationSchema },
       { name: ForgottenPassword.name, schema: ForgottenPasswordSchema },
-      { name: ConsentRegistry.name, schema: ConsentRegistrySchema },
     ]),
   ],
   controllers: [AuthController],

@@ -11,16 +11,15 @@ import {
 } from '../models/credentials.interface';
 
 // schemas
-import { ConsentRegistry } from '../schemas/consent-registry.schema';
 import { EmailVerification } from '../schemas/email-verification.schema';
 import { ForgottenPassword } from '../schemas/forgotten-password.schema';
-import { Invitation } from '../../../shared/invitation/schemas/invitation.schema';
 import { User } from '../../../shared/users/schemas/user.schema';
 
 // services
 import { InvitationService } from '../../../shared/invitation/services/invitation.service';
 import { MailerService } from '../../../core/mailer/mailer.service';
 import { UsersService } from '../../../shared/users/services/users.service';
+import { ConsentRegistryService } from '../../../shared/auth/services/consent-registry.service';
 
 @Injectable()
 export class AuthService {
@@ -29,8 +28,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly invitationService: InvitationService,
     private readonly mailerService: MailerService,
-    @InjectModel(ConsentRegistry.name)
-    private readonly consentRegistryModel: Model<ConsentRegistry>,
+    private readonly consentRegistryService: ConsentRegistryService,
     @InjectModel(EmailVerification.name)
     private readonly emailVerificationModel: Model<EmailVerification>,
     @InjectModel(ForgottenPassword.name)
@@ -41,7 +39,7 @@ export class AuthService {
     userInformation: RegisterCredentials,
   ): Promise<EmailVerification> {
     const user = await this.usersService.addOne(userInformation);
-    await this.saveUserConsent(user.email);
+    await this.consentRegistryService.saveUserConsent(user.email);
     return await this.createEmailVerificationToken(user.email);
   }
 
@@ -61,18 +59,6 @@ export class AuthService {
     await this.invitationService.deleteOne(invitation_token);
 
     return await this.usersService.addOne(userInfo);
-  }
-
-  public async saveUserConsent(email: string): Promise<ConsentRegistry> {
-    const userConsent = {
-      email: email,
-      privacy_policy: 'privacy policy',
-      accepted_policy: true,
-      checkbox_text: 'I accept privacy policy',
-      cookie_policy: true,
-      date: new Date(),
-    };
-    return await this.consentRegistryModel.create({ ...userConsent });
   }
 
   public async createEmailVerificationToken(
@@ -238,14 +224,6 @@ export class AuthService {
     return await this.forgottenPasswordModel
       .findOne({ new_password_token })
       .exec();
-  }
-
-  public async getEmailByInvitationToken(
-    invitation_token: string,
-  ): Promise<Invitation> {
-    return await this.invitationService.findOneByInvitationToken(
-      invitation_token,
-    );
   }
 
   private async createToken(email: string, id: string) {

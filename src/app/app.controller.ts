@@ -11,4 +11,22 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('restricted/admin')
+  @UseGuards(JwtAuthGuard)
+  getAdminHello(): string {
+    return this.appService.getHello();
+  }
+
+  @Get('restricted/owner')
+  @UseGuards(JwtAuthGuard)
+  getOwnerHello(): string {
+    return this.appService.getHello();
+  }
+
+  @Get('restricted/user')
+  @UseGuards(JwtAuthGuard)
+  getUserHello(): string {
+    return this.appService.getHello();
+  }
 }

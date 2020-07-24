@@ -28,7 +28,7 @@ and TechHive.IO's best practices and recommendations.
 ## Getting Started
 
 ```bash
-git clone https://github.com/techhiveIO/nest-authentication-and-user-management-starter
+git clone --depth 1 https://github.com/techhiveIO/nest-authentication-and-user-management-starter
 cd my-project
 rm -r .git
 cp .env.example .env

@@ -72,11 +72,11 @@ export class AuthController {
     }
   }
 
-  @Post('register/:invitation_token')
+  @Post('register')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
   public async registerByInvitation(
-    @Param() params: RegisterByInvitationParamPayload,
+    @Query() params: RegisterByInvitationParamPayload,
     @Body() credentials: RegisterPayload,
   ): Promise<ResponseInterface> {
     try {
@@ -141,10 +141,10 @@ export class AuthController {
     }
   }
 
-  @Get('reset-password/:token')
+  @Get('reset-password')
   @HttpCode(HttpStatus.OK)
   public async getEmailForResetPassword(
-    @Param() params: ForgotPasswordParamPayload,
+    @Query() params: ForgotPasswordParamPayload,
   ) {
     try {
       return this.authService.getEmailByForgotPasswordToken(params.token);
@@ -153,10 +153,10 @@ export class AuthController {
     }
   }
 
-  @Post('reset-password/:token')
+  @Post('reset-password')
   @HttpCode(HttpStatus.OK)
   public async resetPassword(
-    @Param() params: ForgotPasswordParamPayload,
+    @Query() params: ForgotPasswordParamPayload,
     @Body() forgotPassword: ForgotPasswordPayload,
   ) {
     try {

@@ -94,10 +94,11 @@ export class AuthService {
       credentials.email,
       credentials.password,
     );
+
     if (!user) throw Error('LOGIN.USER_NOT_FOUND');
     if (!user.auth.email.valid) throw Error('LOGIN.EMAIL_NOT_VERIFIED');
     const access_token = await this.createToken(user.email, user.id);
-    return { user, access_token };
+    return { user: this.formatUser(user), access_token };
   }
 
   public async createForgottenPasswordToken(email: string) {
@@ -229,6 +230,16 @@ export class AuthService {
   private async createToken(email: string, id: string) {
     const payload = { email, sub: id };
     return this.jwtService.sign(payload);
+  }
+
+  private formatUser(user: User): Partial<User> {
+    return {
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      role: user.role,
+      settings: user.settings,
+    };
   }
 
   async validateUser(signedUser: LoginCredentials): Promise<User> {

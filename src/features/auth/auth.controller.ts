@@ -28,6 +28,7 @@ import {
   ForgotPasswordPayload,
 } from './payloads/forgot-password.payload';
 import { ResponseInterface } from '../../core/response/response.interface';
+import { User } from '../../shared/users/schemas/user.schema';
 
 @Controller('auth')
 @UseInterceptors(new MongoErrorHandlerInterceptor())
@@ -39,7 +40,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   public async login(
     @Body() credentials: LoginPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const response = await this.authService.login(credentials);
       return new ResponseSuccess('LOGIN.SUCCESS', response);
@@ -53,7 +54,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   public async register(
     @Body() credentials: RegisterPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const emailVerification = await this.authService.register(credentials);
       const emailSent = await this.authService.sendEmailVerification(
@@ -78,7 +79,7 @@ export class AuthController {
   public async registerByInvitation(
     @Query() params: RegisterByInvitationParamPayload,
     @Body() credentials: RegisterPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const response = await this.authService.registerByInvitation(
         params.invitation_token,

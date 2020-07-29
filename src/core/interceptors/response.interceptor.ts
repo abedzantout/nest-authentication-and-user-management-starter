@@ -9,8 +9,12 @@ import { catchError, tap } from 'rxjs/operators';
 import { ResponseInterface } from '../response/response.interface';
 import { ResponseError } from '../response/response';
 
+/**
+ * still WIP
+ */
 @Injectable()
-export class ResponseInterceptor implements NestInterceptor<ResponseInterface> {
+export class ResponseInterceptor<T>
+  implements NestInterceptor<ResponseInterface<T>> {
   message: string;
   data: any[];
   error_message: any;

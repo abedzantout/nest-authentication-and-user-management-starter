@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 
 import { AppController } from './app.controller';
@@ -19,7 +18,6 @@ const mongooseOptions: MongooseModuleOptions = {
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     CoreModule.forRoot(),
     MongooseModule.forRoot(
       process.env.MONGODB_CONNECTION_STRING,

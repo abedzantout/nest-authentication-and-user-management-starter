@@ -125,10 +125,10 @@ export class AuthController {
     @Query() params: EmailTokenVerificationPayload,
   ): Promise<any> {
     try {
-      // todo: login user automatically
-      return await this.authService.verifyEmail(params.token);
+      await this.authService.verifyEmail(params.token);
+      return new ResponseSuccess('VERIFICATION.SUCCESS');
     } catch (e) {
-      console.log(e);
+      return new ResponseError('VERIFICATION.ERROR', e);
     }
   }
 
@@ -177,7 +177,7 @@ export class AuthController {
       }
       return new ResponseError('RESET_PASSWORD.CHANGE_PASSWORD_ERROR');
     } catch (e) {
-      return e;
+      return new ResponseError('RESET_PASSWORD.ERROR', e);
     }
   }
 }

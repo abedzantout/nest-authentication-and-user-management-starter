@@ -1,6 +1,6 @@
 import { ResponseInterface } from './response.interface';
 
-export class ResponseError implements ResponseInterface {
+export class ResponseError<T> implements ResponseInterface<T> {
   message: string;
   data: any[];
   error_message: any;
@@ -20,7 +20,7 @@ export class ResponseError implements ResponseInterface {
   }
 }
 
-export class ResponseSuccess implements ResponseInterface {
+export class ResponseSuccess<T> implements ResponseInterface<T> {
   message: string;
   data: any[];
   error_message: any;

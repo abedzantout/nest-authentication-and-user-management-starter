@@ -44,15 +44,21 @@ export class UsersController {
   @Get()
   async getUsers() {
     try {
-      return await this.usersService.getAll();
-    } catch (e) {}
+      const users = await this.usersService.getAll();
+      return new ResponseSuccess('USERS.GET_ALL.SUCCESS', users);
+    } catch (e) {
+      return new ResponseError('USERS.GET_ALL.ERROR', e);
+    }
   }
 
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     try {
-      return await this.usersService.getById(id);
-    } catch (e) {}
+      const user = await this.usersService.getById(id);
+      return new ResponseSuccess('USERS.GET_ONE.SUCCESS', user);
+    } catch (e) {
+      return new ResponseError('USERS.GET_ONE.ERROR', e);
+    }
   }
 
   @Patch()

@@ -94,6 +94,7 @@ export class AuthService {
       credentials.email,
       credentials.password,
     );
+
     if (!user) throw Error('LOGIN.USER_NOT_FOUND');
     if (!user.auth.email.valid) throw Error('LOGIN.EMAIL_NOT_VERIFIED');
     const access_token = await this.createToken(user.email, user.id);

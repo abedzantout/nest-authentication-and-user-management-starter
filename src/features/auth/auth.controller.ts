@@ -21,16 +21,23 @@ import {
   EmailTokenVerificationPayload,
   EmailVerificationPayload,
 } from './payloads/email-verification.payload';
-import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
 import { ResponseError, ResponseSuccess } from '../../core/response/response';
 import {
   ForgotPasswordParamPayload,
   ForgotPasswordPayload,
 } from './payloads/forgot-password.payload';
 import { ResponseInterface } from '../../core/response/response.interface';
+import { User } from '../../shared/users/schemas/user.schema';
 
+/**
+ * Authentication controller
+ * Handles everything in authenticating the users, and providing authorization to restricted resources on the server
+ *
+ *  @param auth - Main route
+ *
+ * @publicApi
+ */
 @Controller('auth')
-@UseInterceptors(new MongoErrorHandlerInterceptor())
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -39,7 +46,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   public async login(
     @Body() credentials: LoginPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const response = await this.authService.login(credentials);
       return new ResponseSuccess('LOGIN.SUCCESS', response);
@@ -53,7 +60,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   public async register(
     @Body() credentials: RegisterPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const emailVerification = await this.authService.register(credentials);
       const emailSent = await this.authService.sendEmailVerification(
@@ -78,7 +85,7 @@ export class AuthController {
   public async registerByInvitation(
     @Query() params: RegisterByInvitationParamPayload,
     @Body() credentials: RegisterPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const response = await this.authService.registerByInvitation(
         params.invitation_token,

@@ -1,20 +1,8 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { SchemaOptions } from '@nestjs/mongoose/dist/decorators/schema.decorator';
 
 import { UserRoles } from '../models/user.model';
-
-// todo: unify
-const schemaOptions: SchemaOptions = {
-  toJSON: {
-    virtuals: true,
-    versionKey: false,
-    transform: (doc, result) => {
-      result.id = result._id;
-      delete result._id;
-    },
-  },
-};
+import { schemaOptions } from '../../../core/schemas/schema-options';
 
 @Schema(schemaOptions)
 export class User extends Document {

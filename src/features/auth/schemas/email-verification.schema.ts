@@ -1,15 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { SchemaOptions } from '@nestjs/mongoose/dist/decorators/schema.decorator';
 
-// todo: unify
-const schemaOptions: SchemaOptions = {
-  collection: 'email-verifications',
-  toJSON: {
-    virtuals: true,
-    versionKey: false,
-  },
-};
+import { schemaOptions } from '../../../core/schemas/schema-options';
 
 @Schema(schemaOptions)
 export class EmailVerification extends Document {

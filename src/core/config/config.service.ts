@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
+interface EnvironmentVariables {
+  PORT: number;
+  TIMEOUT: string;
+}
+
 @Injectable()
 export class ConfigService {
   private currentEnv: string = process.env.NODE_ENV || 'development';

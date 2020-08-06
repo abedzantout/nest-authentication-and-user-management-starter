@@ -6,9 +6,10 @@ import { ConfigModule } from '@nestjs/config';
 import { MongoErrorHandlerInterceptor } from './interceptors/mongo-error-handler.interceptor';
 import { ConfigService } from './config/config.service';
 import { MailerService } from './mailer/mailer.service';
+import { validationOptions, validationSchema } from './config/valiation-schema';
 
 const MODULES = [
-  ConfigModule.forRoot(),
+  ConfigModule.forRoot({ validationSchema, validationOptions }),
   PassportModule.register({ defaultStrategy: 'jwt' }),
   JwtModule.register({
     secret: process.env.JWT_KEY,

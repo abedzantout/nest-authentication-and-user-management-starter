@@ -1,8 +1,9 @@
 import { registerAs } from '@nestjs/config';
 
-const DEFAULT_MONGODB_PORT = 27017;
+export enum DatabaseConfigEnum {
+  mongo_uri = 'database.mongo_uri',
+}
 
 export default registerAs('database', () => ({
-  host: process.env.DATABASE_HOST,
-  port: process.env.DATABASE_PORT || DEFAULT_MONGODB_PORT,
+  mongo_uri: process.env.MONGO_URI,
 }));

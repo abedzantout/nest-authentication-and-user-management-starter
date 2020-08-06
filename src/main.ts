@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // initialize helmet
-  app.use(helmet());
+  app.use(helmet);
 
   // enable cors
   app.enableCors();

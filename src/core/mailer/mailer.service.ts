@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { createTransport, Transporter } from 'nodemailer';
-import { ConfigService } from '../config/config.service';
+import { EnvService } from '../config/env.service';
 
 export interface MailerOptions {
   email: string;
@@ -28,7 +28,7 @@ export class MailerService {
 
   private readonly host = this.configService.host;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: EnvService) {}
 
   private generateLink(link: string) {
     return this.host + link;

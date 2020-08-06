@@ -16,13 +16,13 @@ interface ValidatedUser {
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private readonly configService: EnvService,
+    private readonly envService: EnvService,
     private readonly authService: AuthService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: true,
-      secretOrKey: configService.JWT.Key,
+      secretOrKey: envService.JWT.key,
     });
   }
 

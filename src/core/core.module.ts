@@ -4,9 +4,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 
 import { DatabaseModule } from './database/database.module';
-import { MongoErrorHandlerInterceptor } from './interceptors/mongo-error-handler.interceptor';
-
-import { MailerService } from './mailer/mailer.service';
 import { validationOptions, validationSchema } from './config/valiation-schema';
 
 // config loaders
@@ -31,7 +28,7 @@ const MODULES = [
   }),
   DatabaseModule.forRoot(),
 ];
-const PROVIDERS = [EnvService, MongoErrorHandlerInterceptor, MailerService];
+const PROVIDERS = [EnvService];
 
 @Module({
   imports: [...MODULES],

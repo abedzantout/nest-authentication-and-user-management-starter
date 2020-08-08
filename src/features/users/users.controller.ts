@@ -13,7 +13,7 @@ import { UsersService } from '../../shared/users/services/users.service';
 import { UserUpdatePayload } from './payloads/user-update.payload';
 import { UserDeletePayload } from './payloads/user-delete.payload';
 import { InvitationPayload } from './payloads/invitation.payload';
-import { ResponseError, ResponseSuccess } from '../../core/response/response';
+import { ResponseError, ResponseSuccess } from '../../common/response/response';
 import { InvitationRequestService } from './services/invitation-request.service';
 import { ConsentRegistryService } from '../../shared/auth/services/consent-registry.service';
 

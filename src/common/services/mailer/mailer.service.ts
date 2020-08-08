@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { createTransport, Transporter } from 'nodemailer';
-import { EnvService } from '../config/env.service';
+import { EnvService } from '../../../core/config/env.service';
 
 export interface MailerOptions {
   email: string;

@@ -21,13 +21,13 @@ import {
   EmailTokenVerificationPayload,
   EmailVerificationPayload,
 } from './payloads/email-verification.payload';
-import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
-import { ResponseError, ResponseSuccess } from '../../core/response/response';
+import { MongoErrorHandlerInterceptor } from '../../common/interceptors/mongo-error-handler.interceptor';
+import { ResponseError, ResponseSuccess } from '../../common/response/response';
 import {
   ForgotPasswordParamPayload,
   ForgotPasswordPayload,
 } from './payloads/forgot-password.payload';
-import { ResponseInterface } from '../../core/response/response.interface';
+import { ResponseInterface } from '../../common/response/response.interface';
 import { User } from '../../shared/users/schemas/user.schema';
 
 @Controller('auth')

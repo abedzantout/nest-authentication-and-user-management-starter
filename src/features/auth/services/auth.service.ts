@@ -17,7 +17,7 @@ import { User } from '../../../shared/users/schemas/user.schema';
 
 // services
 import { InvitationService } from '../../../shared/invitation/services/invitation.service';
-import { MailerService } from '../../../core/mailer/mailer.service';
+import { MailerService } from '../../../common/services/mailer/mailer.service';
 import { UsersService } from '../../../shared/users/services/users.service';
 import { ConsentRegistryService } from '../../../shared/auth/services/consent-registry.service';
 

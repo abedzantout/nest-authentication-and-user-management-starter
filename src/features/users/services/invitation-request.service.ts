@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../../shared/users/services/users.service';
 import { InvitationService } from '../../../shared/invitation/services/invitation.service';
-import { MailerService } from '../../../core/mailer/mailer.service';
+import { MailerService } from '../../../common/services/mailer/mailer.service';
 
 @Injectable()
 export class InvitationRequestService {

@@ -20,6 +20,7 @@ const MODULES = [
     validationSchema,
     validationOptions,
     load: [databaseConfig, jwtConfig],
+    isGlobal: true,
   }),
   PassportModule.register({ defaultStrategy: AUTH_DEFAULT_STRATEGY }),
   JwtModule.register({

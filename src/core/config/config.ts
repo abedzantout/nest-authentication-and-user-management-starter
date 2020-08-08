@@ -25,3 +25,6 @@ export enum jwtConfigEnum {
   access_token_ttl = 'jwt.access_token_ttl',
   refresh_token_ttl = 'jwt.refresh_token_ttl',
 }
+
+export const AUTH_DEFAULT_STRATEGY = 'jwt';
+export const AUTH_DEFAULT_EXPIRATION = '10 hours';

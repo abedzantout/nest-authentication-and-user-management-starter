@@ -1,19 +1,35 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
-import { MongoErrorHandlerInterceptor } from './interceptors/mongo-error-handler.interceptor';
-import { ConfigService } from './config/config.service';
-import { MailerService } from './mailer/mailer.service';
+import { DatabaseModule } from './database/database.module';
+import { validationOptions, validationSchema } from './config/valiation-schema';
+
+// config loaders
+import databaseConfig from './config/database.config';
+import jwtConfig from './config/jwt.config';
+import {
+  AUTH_DEFAULT_EXPIRATION,
+  AUTH_DEFAULT_STRATEGY,
+} from './config/config';
+import { EnvService } from './config/env.service';
 
 const MODULES = [
-  PassportModule.register({ defaultStrategy: 'jwt' }),
-  JwtModule.register({
-    secret: 'secret',
-    signOptions: { expiresIn: '10 hours' },
+  ConfigModule.forRoot({
+    validationSchema,
+    validationOptions,
+    load: [databaseConfig, jwtConfig],
+    isGlobal: true,
   }),
+  PassportModule.register({ defaultStrategy: AUTH_DEFAULT_STRATEGY }),
+  JwtModule.register({
+    secret: process.env.JWT_KEY,
+    signOptions: { expiresIn: AUTH_DEFAULT_EXPIRATION },
+  }),
+  DatabaseModule.forRoot(),
 ];
-const PROVIDERS = [ConfigService, MongoErrorHandlerInterceptor, MailerService];
+const PROVIDERS = [EnvService];
 
 @Module({
   imports: [...MODULES],

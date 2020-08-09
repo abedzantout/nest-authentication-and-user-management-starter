@@ -13,7 +13,7 @@ import { UsersService } from '../../shared/users/services/users.service';
 import { UserUpdatePayload } from './payloads/user-update.payload';
 import { UserDeletePayload } from './payloads/user-delete.payload';
 import { InvitationPayload } from './payloads/invitation.payload';
-import { ResponseError, ResponseSuccess } from '../../core/response/response';
+import { ResponseError, ResponseSuccess } from '../../common/response/response';
 import { InvitationRequestService } from './services/invitation-request.service';
 import { ConsentRegistryService } from '../../shared/auth/services/consent-registry.service';
 
@@ -44,15 +44,21 @@ export class UsersController {
   @Get()
   async getUsers() {
     try {
-      return await this.usersService.getAll();
-    } catch (e) {}
+      const users = await this.usersService.getAll();
+      return new ResponseSuccess('USERS.GET_ALL.SUCCESS', users);
+    } catch (e) {
+      return new ResponseError('USERS.GET_ALL.ERROR', e);
+    }
   }
 
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     try {
-      return await this.usersService.getById(id);
-    } catch (e) {}
+      const user = await this.usersService.getById(id);
+      return new ResponseSuccess('USERS.GET_ONE.SUCCESS', user);
+    } catch (e) {
+      return new ResponseError('USERS.GET_ONE.ERROR', e);
+    }
   }
 
   @Patch()

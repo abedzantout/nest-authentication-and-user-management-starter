@@ -90,13 +90,15 @@ or use it as a inspiration to build any powerful API server using Nest Js.
 
 ## Features
 
+- JWT authentication with email verification out of the box
 - Powerful Nest API out of the box
 - Built-in powerful authentication and user management APIs
 - User invitation
-- JWT integration
 - MongoDB and Mongoose Integration
 - Optimized for speed and scalability
-- Postman file included
+- Postman file included for easy testing
+- HMR integration
+- Security integration out of the box
 
 ## Stack
 
@@ -106,6 +108,12 @@ or use it as a inspiration to build any powerful API server using Nest Js.
 - MongoDB and [Mongoose](https://mongoosejs.com/)
 - [Nodemailer](https://nodemailer.com/about/)
 
+# Security
+The project implements some of nodejs [security techniques](https://docs.nestjs.com/techniques/security) :
+- [Helmet](https://github.com/helmetjs/helmet) : can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately
+- [Express Rate Limit](https://github.com/nfriedly/express-rate-limit): to protect your applications from brute-force attacks
+  - In the main.ts you can set a limit of requests in a time window (default is 100 requests in 15 minutes for all endpoints, and 3 requests in a 1 hour for sign up endpoint)
+  
 ## Learning Materials
 
 ## Bugs

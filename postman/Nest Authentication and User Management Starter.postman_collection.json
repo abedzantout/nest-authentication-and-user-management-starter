@@ -1,0 +1,523 @@
+{
+  "info": {
+    "_postman_id": "ed69bdbc-7509-46de-be9b-51884bad66a7",
+    "name": "Nest Authentication and User Management Starter",
+    "description": "Nest Authentication and User Management Starter API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "[Authentication] [User] Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "abed@techhive.io",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "first_name",
+                  "value": "abed",
+                  "type": "text"
+                },
+                {
+                  "key": "last_name",
+                  "value": "zantout",
+                  "type": "text"
+                },
+                {
+                  "key": "role",
+                  "value": "owner",
+                  "type": "text"
+                }
+              ],
+              "options": {
+                "urlencoded": {}
+              }
+            },
+            "url": {
+              "raw": "{{host}}/auth/register",
+              "host": ["{{host}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Authentication] [User] Confirm registration",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/auth/verify?token=7943fd7e-6a17-484f-84b0-e924d8ba815f",
+              "host": ["{{host}}"],
+              "path": ["auth", "verify"],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "7943fd7e-6a17-484f-84b0-e924d8ba815f"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Authentication] [User] Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "abed@techhive.io",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "text"
+                }
+              ],
+              "options": {
+                "urlencoded": {}
+              }
+            },
+            "url": {
+              "raw": "{{host}}/auth/login",
+              "host": ["{{host}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Authentication] [User] Forgot password / Request change password",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [],
+              "options": {
+                "urlencoded": {}
+              }
+            },
+            "url": {
+              "raw": "{{host}}/auth/forgot-password/abed@techhive.io",
+              "host": ["{{host}}"],
+              "path": ["auth", "forgot-password", "abed@techhive.io"],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "abed@techhive.io",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Authentication] Fetch User info By Forgot Password Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/auth/reset-password?token=3ecd0c36-3579-45e8-8076-783f78e1bf9f",
+              "host": ["{{host}}"],
+              "path": ["auth", "reset-password"],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "3ecd0c36-3579-45e8-8076-783f78e1bf9f"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Authentication] [User] Reset password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "abed@techhive.io",
+                  "type": "text"
+                },
+                {
+                  "key": "new_password",
+                  "value": "password",
+                  "type": "text"
+                }
+              ],
+              "options": {
+                "urlencoded": {}
+              }
+            },
+            "url": {
+              "raw": "{{host}}/auth/reset-password/?token=c5dfbe21-2ffe-4769-9f9c-93eb950065e5",
+              "host": ["{{host}}"],
+              "path": ["auth", "reset-password", ""],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "c5dfbe21-2ffe-4769-9f9c-93eb950065e5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Authentication] Accept invitation and sign up",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "abed@techhive.io",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "first_name",
+                  "value": "abed",
+                  "type": "text"
+                },
+                {
+                  "key": "last_name",
+                  "value": "zantout",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/auth/register/?invitation_token=02dd24f6-8c0b-44d1-9e54-5a4a330c6613",
+              "host": ["{{host}}"],
+              "path": ["auth", "register", ""],
+              "query": [
+                {
+                  "key": "invitation_token",
+                  "value": "02dd24f6-8c0b-44d1-9e54-5a4a330c6613"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Authentication] Resend Verification Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/auth/resend-verification/abed@techhive.io",
+              "host": ["{{host}}"],
+              "path": ["auth", "resend-verification", "abed@techhive.io"],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "238f8362-f18b-43b0-9fbb-da6600b8ef9d",
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "6788619e-9bf9-4dc1-81e7-b023a7b0de74",
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "[Users] Get users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/users/",
+              "host": ["{{host}}"],
+              "path": ["users", ""],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "5ede405e556c4ec69de944be",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Users] Get user by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/users/5ede405e556c4ec69de944be",
+              "host": ["{{host}}"],
+              "path": ["users", "5ede405e556c4ec69de944be"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Users] Invite User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "email",
+                  "value": "abed@techhive.io",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/users",
+              "host": ["{{host}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Users] Delete user",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/users/5f0c651168a25626189b85a6",
+              "host": ["{{host}}"],
+              "path": ["users", "5f0c651168a25626189b85a6"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Users] Update user",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/users",
+              "host": ["{{host}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "62b8abdd-7988-4c95-8d5c-8580ba60653e",
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "d8eeffa6-3da4-4088-9a96-ff874a4eff15",
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Restricted routes",
+      "item": [
+        {
+          "name": "Restricted Route",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/restricted",
+              "host": ["{{host}}"],
+              "path": ["restricted"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Admin] Restricted",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/restricted/admin",
+              "host": ["{{host}}"],
+              "path": ["restricted", "admin"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[Owner] Restricted",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/restricted/owner",
+              "host": ["{{host}}"],
+              "path": ["restricted", "owner"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[User] Restricted",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/restricted/user",
+              "host": ["{{host}}"],
+              "path": ["restricted", "user"]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "ac487d32-fe61-4aed-8eb7-e1143135ea80",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "807a7e7f-47df-4f02-b00a-24064d7645a2",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

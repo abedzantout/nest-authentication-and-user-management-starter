@@ -7,7 +7,6 @@ import {
   Param,
   Post,
   Query,
-  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -21,16 +20,15 @@ import {
   EmailTokenVerificationPayload,
   EmailVerificationPayload,
 } from './payloads/email-verification.payload';
-import { MongoErrorHandlerInterceptor } from '../../core/interceptors/mongo-error-handler.interceptor';
-import { ResponseError, ResponseSuccess } from '../../core/response/response';
+import { ResponseError, ResponseSuccess } from '../../common/response/response';
 import {
   ForgotPasswordParamPayload,
   ForgotPasswordPayload,
 } from './payloads/forgot-password.payload';
-import { ResponseInterface } from '../../core/response/response.interface';
+import { ResponseInterface } from '../../common/response/response.interface';
+import { User } from '../../shared/users/schemas/user.schema';
 
 @Controller('auth')
-@UseInterceptors(new MongoErrorHandlerInterceptor())
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -39,7 +37,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   public async login(
     @Body() credentials: LoginPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const response = await this.authService.login(credentials);
       return new ResponseSuccess('LOGIN.SUCCESS', response);
@@ -53,7 +51,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   public async register(
     @Body() credentials: RegisterPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const emailVerification = await this.authService.register(credentials);
       const emailSent = await this.authService.sendEmailVerification(
@@ -72,13 +70,13 @@ export class AuthController {
     }
   }
 
-  @Post('register/:invitation_token')
+  @Post('register')
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe())
   public async registerByInvitation(
-    @Param() params: RegisterByInvitationParamPayload,
+    @Query() params: RegisterByInvitationParamPayload,
     @Body() credentials: RegisterPayload,
-  ): Promise<ResponseInterface> {
+  ): Promise<ResponseInterface<User>> {
     try {
       const response = await this.authService.registerByInvitation(
         params.invitation_token,
@@ -118,10 +116,10 @@ export class AuthController {
     @Query() params: EmailTokenVerificationPayload,
   ): Promise<any> {
     try {
-      // todo: login user automatically
-      return await this.authService.verifyEmail(params.token);
+      await this.authService.verifyEmail(params.token);
+      return new ResponseSuccess('VERIFICATION.SUCCESS');
     } catch (e) {
-      console.log(e);
+      return new ResponseError('VERIFICATION.ERROR', e);
     }
   }
 
@@ -141,10 +139,10 @@ export class AuthController {
     }
   }
 
-  @Get('reset-password/:token')
+  @Get('reset-password')
   @HttpCode(HttpStatus.OK)
   public async getEmailForResetPassword(
-    @Param() params: ForgotPasswordParamPayload,
+    @Query() params: ForgotPasswordParamPayload,
   ) {
     try {
       return this.authService.getEmailByForgotPasswordToken(params.token);
@@ -153,10 +151,10 @@ export class AuthController {
     }
   }
 
-  @Post('reset-password/:token')
+  @Post('reset-password')
   @HttpCode(HttpStatus.OK)
   public async resetPassword(
-    @Param() params: ForgotPasswordParamPayload,
+    @Query() params: ForgotPasswordParamPayload,
     @Body() forgotPassword: ForgotPasswordPayload,
   ) {
     try {
@@ -170,7 +168,7 @@ export class AuthController {
       }
       return new ResponseError('RESET_PASSWORD.CHANGE_PASSWORD_ERROR');
     } catch (e) {
-      return e;
+      return new ResponseError('RESET_PASSWORD.ERROR', e);
     }
   }
 }

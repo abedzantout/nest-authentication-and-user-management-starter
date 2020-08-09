@@ -7,7 +7,6 @@ import {
   Param,
   Post,
   Query,
-  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -21,7 +20,6 @@ import {
   EmailTokenVerificationPayload,
   EmailVerificationPayload,
 } from './payloads/email-verification.payload';
-import { MongoErrorHandlerInterceptor } from '../../common/interceptors/mongo-error-handler.interceptor';
 import { ResponseError, ResponseSuccess } from '../../common/response/response';
 import {
   ForgotPasswordParamPayload,
@@ -31,7 +29,6 @@ import { ResponseInterface } from '../../common/response/response.interface';
 import { User } from '../../shared/users/schemas/user.schema';
 
 @Controller('auth')
-@UseInterceptors(new MongoErrorHandlerInterceptor())
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

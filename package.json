@@ -1,6 +1,6 @@
 {
   "name": "nest-boilerplate",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta.2",
   "description": "Powerful API starter with authentication and user management",
   "author": "Techhive.IO LLC",
   "contributors": [
@@ -25,7 +25,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "release": "standard-version && git push --follow-tags origin master"
   },
   "husky": {
     "hooks": {
@@ -60,6 +61,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.2",
+    "standard-version": "^8.0.2",
     "uuid": "^8.3.0",
     "webpack": "^4.44.1"
   },

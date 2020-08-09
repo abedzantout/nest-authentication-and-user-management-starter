@@ -38,10 +38,14 @@ npm run dev
 Make sure you enter the correct values in your `.env` file:
 
 ```
-MONGODB_CONNECTION_STRING=<your mongodb string>
-NODEMAILER_EMAIL=<your modemailer email>
-NODEMAILER_PASSWORD=<your modemailer password>
-HOST=<your host >
+MONGODB_CONNECTION_STRING=<your mongodb uri>
+MONGODB_CONNECTION_TEST_STRING=<test mongo uri>
+NODEMAILER_EMAIL=<your email>
+NODEMAILER_PASSWORD=<your email password/auth key>
+HOST=<host> # defaults to http://localhost:3000/
+PORT=<port> # defaults to 3000
+JWT_KEY=<your secret key> # defaults to secretKey
+
 ```
 
 ## Running the app

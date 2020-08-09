@@ -4,6 +4,8 @@ import * as rateLimit from 'express-rate-limit';
 
 import { AppModule } from './app/app.module';
 
+declare const module: any;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -31,6 +33,11 @@ async function bootstrap() {
   app.use('/auth/register', createAccountLimiter);
 
   await app.listen(process.env.PORT || 3000);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 
 void bootstrap();

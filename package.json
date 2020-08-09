@@ -60,7 +60,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.2",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "webpack": "^4.44.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",

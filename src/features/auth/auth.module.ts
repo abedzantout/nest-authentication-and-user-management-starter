@@ -17,6 +17,7 @@ import {
 } from './schemas/forgotten-password.schema';
 
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { CommonModule } from '../../common/common.module';
 
 const providers = [AuthService, JwtStrategy];
 
@@ -24,6 +25,7 @@ const providers = [AuthService, JwtStrategy];
   imports: [
     SharedModule,
     CoreModule.forChild(),
+    CommonModule,
     MongooseModule.forFeature([
       { name: EmailVerification.name, schema: EmailVerificationSchema },
       { name: ForgottenPassword.name, schema: ForgottenPasswordSchema },

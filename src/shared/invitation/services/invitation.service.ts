@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Invitation } from '../schemas/invitation.schema';
 
-import { MailerService } from '../../../core/mailer/mailer.service';
+import { MailerService } from '../../../common/services/mailer/mailer.service';
 
 @Injectable()
 export class InvitationService {

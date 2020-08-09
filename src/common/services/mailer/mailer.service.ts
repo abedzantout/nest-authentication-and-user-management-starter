@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { createTransport, Transporter } from 'nodemailer';
-import { ConfigService } from '../config/config.service';
+import { EnvService } from '../../../core/config/env.service';
 
 export interface MailerOptions {
   email: string;
@@ -21,14 +21,14 @@ export class MailerService {
     secure: false,
     requireTLS: true,
     auth: {
-      user: this.configService.nodemailerConfig.nodemailer_email,
-      pass: this.configService.nodemailerConfig.nodemailer_password,
+      user: this.envService.nodemailerConfig.nodemailer_email,
+      pass: this.envService.nodemailerConfig.nodemailer_password,
     },
   });
 
-  private readonly host = this.configService.host;
+  private readonly host = this.envService.host;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly envService: EnvService) {}
 
   private generateLink(link: string) {
     return this.host + link;
@@ -43,7 +43,7 @@ export class MailerService {
     link,
   }: MailerOptions) {
     return {
-      from: this.configService.nodemailerConfig.nodemailer_email,
+      from: this.envService.nodemailerConfig.nodemailer_email,
       to: email, // list of receivers (separated by ,)
       subject,
       text, // plain text body

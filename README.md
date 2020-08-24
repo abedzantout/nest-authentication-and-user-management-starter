@@ -4,8 +4,11 @@
 
 
 # Nest Authentication and User Management Starter
+![CodeQL](https://github.com/techhiveIO/nest-authentication-and-user-management-starter/workflows/CodeQL/badge.svg?branch=master)
+
 
 by [@techhive.IO](https://www.techhive.io/)
+
 
 ## Description
 

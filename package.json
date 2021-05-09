@@ -2,7 +2,7 @@
   "name": "nest-boilerplate",
   "version": "1.0.0-beta.2",
   "description": "Powerful API starter with authentication and user management",
-  "author": "Techhive.IO LLC",
+  "author": "TechHive.IO",
   "contributors": [
     {
       "email": "abed@techhive.io",
@@ -74,7 +74,6 @@
     "@types/express": "^4.17.11",
     "@types/hapi__joi": "^17.1.6",
     "@types/jest": "26.0.23",
-    "@types/mongoose": "^5.10.5",
     "@types/node": "^15.0.2",
     "@types/nodemailer": "^6.4.1",
     "@types/supertest": "^2.0.11",
